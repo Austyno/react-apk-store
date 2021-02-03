@@ -30,6 +30,7 @@ const UserSchema = new mongoose.Schema(
 			enum: ['user', 'admin'],
 			default: 'user',
 		},
+		myApps: [{type: mongoose.Schema.ObjectId,ref: 'Product'}],
 		resetPasswordToken: String,
 		resetPasswordExpire: Date,
 		createdAt: {

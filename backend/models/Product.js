@@ -16,7 +16,7 @@ const ProductSchema = new mongoose.Schema(
 			required: [true, 'Logo for the apk is required'],
 		},
 		productMedia: {
-			type: String,
+			type: [String],
 			required: [true, 'Image or video is required'],
 		},
 		brand: {
@@ -56,6 +56,10 @@ const ProductSchema = new mongoose.Schema(
 			min: [1, 'Rating must be at least 1'],
 			max: [10, 'Rating must can not be more than 10'],
 		},
+		numReviews: {
+			type: Number,
+			default: 0,
+		},
 		createdAt: {
 			type: Date,
 			default: Date.now,
@@ -71,10 +75,10 @@ ProductSchema.pre('remove', async function (next) {
 	next()
 })
 
-ProductSchema.virtual('Reviews', {
+ProductSchema.virtual('reviews', {
 	ref: 'Review',
 	localField: '_id',
-	foreignField: 'productId',
+	foreignField: 'product',
 	justOne: false,
 })
 

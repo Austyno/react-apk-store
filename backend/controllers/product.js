@@ -9,9 +9,12 @@ const Product = require('../models/Product')
 const getApks = async (req, res, next) => {
 	try {
 		const apks = await Product.find({ isApproved: true })
+			.populate('uploadedBy', 'name email')
+			.populate('category', 'categoryName')
 
 		res.status(200).json({
 			success: true,
+			count: apks.length,
 			data: apks,
 		})
 	} catch (error) {
@@ -31,10 +34,9 @@ const getApk = async (req, res, next) => {
 	const id = req.params.id
 
 	try {
-		const product = await Product.findById(id).populate(
-			'reviews',
-			'title text rating'
-		)
+		const product = await Product.findById(id)
+			.populate('uploadedBy', 'name')
+			.populate('category', 'categoryName')
 
 		res.status(200).json({
 			success: true,

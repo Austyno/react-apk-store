@@ -1,5 +1,6 @@
 const Category = require('../models/Category')
 const ErrorResponse = require('../utils/errorResponse')
+const Product = require('../models/Product')
 
 exports.addCategory = async (req, res, next) => {
 	try {
@@ -63,5 +64,22 @@ exports.updateCategory = async (req, res, next) => {
 				'sorry could not update at the moment, please try again'
 			)
 		)
+	}
+}
+exports.getProducts = async (req, res, next) => {
+	const cat = await Category.findById(req.params.id)
+
+	if (!cat) {
+		return next(new ErrorResponse('this category does not exist', 400))
+	}
+
+	try {
+		const products = await Product.find({ category: req.params.id })
+		res.status(200).json({
+			success: true,
+			data: products,
+		})
+	} catch (error) {
+		next(new ErrorResponse('sorry something went wrong please try again', 500))
 	}
 }

@@ -16,6 +16,7 @@ connectToDb()
 const productRoutes = require('./routes/product')
 const categoryRoutes = require('./routes/category')
 const userRoutes = require('./routes/user')
+const reviewRoutes = require('./routes/reviews')
 
 const app = express()
 
@@ -47,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/api/v1/products', productRoutes)
 app.use('/api/v1/category', categoryRoutes)
 app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/reviews', reviewRoutes)
 
 // app.get("/api/config/paypal", (req, res) =>
 //   res.send(process.env.PAYPAL_CLIENT_ID)

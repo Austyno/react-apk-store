@@ -5,9 +5,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #EEEEEE;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.productCard:hover{
+  box-shadow: 5px 10px 20px rgb(0,0,0,.3);
+}
+.card{
+  box-shadow: 0px 0px 5px rgb(0 0 0 / 10%);
+}
+
