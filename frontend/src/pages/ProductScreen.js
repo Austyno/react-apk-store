@@ -2,10 +2,11 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProduct } from '../actions/productActions'
 import Rating from '../components/Rating'
-import Slider from 'react-animated-slider'
 import Product from '../components/Product'
 import Reviews from '../components/Review'
 import Loader from '../components/Loader'
+import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 import {
 	Row,
@@ -16,11 +17,11 @@ import {
 	Button,
 	Container,
 } from 'react-bootstrap'
-import image from '../images/war machines_1611642250300.png'
+// import image from '../images/war_machines_1611642250300_logo.png'
 
 const ProductScreen = ({ match }) => {
 	const dispatch = useDispatch()
-	const productState = useSelector((state) => state.product)
+	const productState = useSelector((state) => state.productDetails)
 
 	const { loading, error, product } = productState
 
@@ -40,6 +41,16 @@ const ProductScreen = ({ match }) => {
 		dispatch(fetchProduct(match.params.id))
 	}, [dispatch, match])
 
+	const getApk = async () => {
+		const user = JSON.parse(localStorage.getItem('userInfo'))
+
+		if (!user) {
+			<Redirect to='/login' />
+		}
+
+		await axios.get(`/api/download/${product._id}`)
+	}
+
 	return (
 		<>
 			{loading ? (
@@ -57,7 +68,7 @@ const ProductScreen = ({ match }) => {
 											<Col md={4}>
 												<Card.Img
 													className='ml-3'
-													src={image}
+													src={product.logo && `${product.logo}`}
 													style={{ width: '150px' }}
 												/>
 											</Col>
@@ -74,7 +85,9 @@ const ProductScreen = ({ match }) => {
 												<ListGroup variant='flush'>
 													<ListGroupItem>
 														{product.price === 0 ? (
-															<Button className='btn btn-primary'>
+															<Button
+																onClick={getApk}
+																className='btn btn-primary'>
 																Download
 															</Button>
 														) : (
@@ -114,31 +127,13 @@ const ProductScreen = ({ match }) => {
 										</Row>
 									</Card.Title>
 									<Card.Body>
-										<Slider
-											previousButton={
-												<i className='fa fa-angle-single-left'></i>
-											}
-											nextButton={<i className='fa fa-angle-double-right'></i>}>
-											{product.productMedia &&
-												product.productMedia.map((m, index) => (
-													<img
-														key={index}
-														src={m}
-														alt=''
-														style={{
-															backgroundSize: 'cover',
-															width: '100%',
-															height: '1000px',
-														}}
-													/>
-												))}
-										</Slider>
+										{/* add slider here if needed */}
 										<Card.Text as='div' className='py-5 '>
 											{product.description}
 										</Card.Text>
 										<hr />
 										<Card.Text className='mb-3' as='h3'>
-											{reviews.length} Reviews
+											{reviews.length > 0 && `${reviews.length} Reviews`}
 										</Card.Text>
 										{reviews.length === 0 && (
 											<h4 style={{ textAlign: 'center' }}>No Reviews</h4>
@@ -163,7 +158,7 @@ const ProductScreen = ({ match }) => {
 									<Row>
 										{similarProducts &&
 											similarProducts.map((p) => (
-												<Col key={p._id} md={3}>
+												<Col key={p._id} md={6}>
 													<Product product={p} />
 												</Col>
 											))}

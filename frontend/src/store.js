@@ -4,16 +4,28 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import {
 	productListReducer,
-	productReducer,
+	productDetailsReducer,
 	similarProductsReducer,
 	productReviewsReducer,
 } from './reducers/productReducers'
 
+import {
+	userLoginReducer,
+	userRegister,
+	userList,
+	userDelete,
+	userUpdate,
+	getUser,
+	forgotPassword,
+	resetPassword,
+} from './reducers/userReducers'
+
 const reducers = combineReducers({
 	productList: productListReducer,
-	product: productReducer,
+	productDetails: productDetailsReducer,
 	similarProducts: similarProductsReducer,
 	productReviews: productReviewsReducer,
+	userLogin: userLoginReducer,
 })
 const initialState = {}
 const store = createStore(

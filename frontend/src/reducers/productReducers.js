@@ -9,8 +9,8 @@ import {
 	SIMILAR_PRODUCT_SUCCESS,
 	SIMILAR_PRODUCT_FAIL,
 	PRODUCT_REVIEWS_REQUEST,
-PRODUCT_REVIEWS_SUCCESS,
-PRODUCT_REVIEWS_FAIL,
+	PRODUCT_REVIEWS_SUCCESS,
+	PRODUCT_REVIEWS_FAIL,
 } from '../constants/productConstants'
 export const productListReducer = (state = { products: [] }, action) => {
 	switch (action.type) {
@@ -25,7 +25,7 @@ export const productListReducer = (state = { products: [] }, action) => {
 	}
 }
 
-export const productReducer = (state = { product: {} }, action) => {
+export const productDetailsReducer = (state = { product: {} }, action) => {
 	switch (action.type) {
 		case PRODUCT_FETCH_REQUEST:
 			return { loading: true, product: {} }
@@ -51,7 +51,6 @@ export const similarProductsReducer = (state = { products: [] }, action) => {
 }
 
 export const productReviewsReducer = (state = { reviews: [] }, action) => {
-	
 	switch (action.type) {
 		case PRODUCT_REVIEWS_REQUEST:
 			return { loading: true, reviews: [] }
@@ -62,5 +61,4 @@ export const productReviewsReducer = (state = { reviews: [] }, action) => {
 		default:
 			return state
 	}
-
 }

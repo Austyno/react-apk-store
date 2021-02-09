@@ -63,11 +63,12 @@ exports.login = async (req, res, next) => {
 	if (!matchPassword) {
 		return next(new ErrorResponse('Invalid credentials', 401))
 	}
-
+	user.password = ''
 	const token = generateJwtToken(user._id)
 
 	res.status(200).json({
 		success: true,
+		userData: user,
 		token,
 	})
 }

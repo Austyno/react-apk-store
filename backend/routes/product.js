@@ -6,9 +6,11 @@ const {
 	uploadApk,
 	updateApk,
 	deleteApk,
+	uploadImages,
 } = require('../controllers/product')
 
 router.route('/').get(getApks).post(protect, uploadApk)
+router.route('/upload').post(protect, uploadImages)
 
 router
 	.route('/:id')

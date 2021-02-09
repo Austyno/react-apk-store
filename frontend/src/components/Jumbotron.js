@@ -13,20 +13,20 @@ const jumbotron = () => {
 	]
 	return (
 		<>
-			<Slider className='animateIn' autoplay={2000} duration={3000}>
+			<Slider
+				className='animateIn'
+				autoplay={2000}
+				duration={3000}
+				previousButton={<i className='fa fa-angle-double-left'></i>}
+				nextButton={<i className='fa fa-angle-double-right'></i>}
+				style={{
+					backgroundSize: 'cover',
+					width: '100%',
+					height: '1000px',
+				}}>
 				{slides.map((slide, index) => (
 					<div key={index}>
-						{/* <span style={{ marginBottom: '-100px' }}>{slide.title}</span> */}
-						<img
-							src={slide.image}
-							alt=''
-							style={{
-								backgroundSize: 'cover',
-								width: '100%',
-								height: '1000px',
-							}}
-						/>
-						{/* <div>{slide.description}</div> */}
+						<img src={slide.image} alt='' />
 					</div>
 				))}
 			</Slider>

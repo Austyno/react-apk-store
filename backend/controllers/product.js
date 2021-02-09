@@ -11,6 +11,7 @@ const getApks = async (req, res, next) => {
 		const apks = await Product.find({ isApproved: true })
 			.populate('uploadedBy', 'name email')
 			.populate('category', 'categoryName')
+			.select('-apk')
 
 		res.status(200).json({
 			success: true,
@@ -37,7 +38,7 @@ const getApk = async (req, res, next) => {
 		const product = await Product.findById(id)
 			.populate('uploadedBy', 'name')
 			.populate('category', 'categoryName')
-
+			.select('-apk')
 		res.status(200).json({
 			success: true,
 			data: product,
@@ -51,6 +52,10 @@ const getApk = async (req, res, next) => {
 // @route     POST /api/v1/products/
 // @access    Private
 const uploadApk = async (req, res, next) => {
+	req.body.uploadedBy = req.user.id
+
+	const { apk } = req.body
+
 	if (!req.user) {
 		return next(
 			new ErrorResponse(
@@ -60,23 +65,33 @@ const uploadApk = async (req, res, next) => {
 		)
 	}
 	if (req.user.role === 'admin') {
-		req.isApproved = true
+		req.body.isApproved = true
 	}
-
-	const media = req.files.media
-	const apk = req.files.apk
-	const logo = req.files.logo
 
 	if (!apk) {
-		return next(new ErrorResponse('Please upload an apk'))
+		return next(
+			new ErrorResponse('Please add a download link for the apk', 400)
+		)
 	}
 
-	/**TO Do: Check if apk already exist b4 storing */
+	if (apk) {
+		try {
+			const result = await Product.create(req.body)
 
-	if (apk.name.split('.')[1] !== 'apk') {
-		next(new ErrorResponse(`${apk.name} is not a valid apk file`, 400))
+			res.status(201).json({
+				success: true,
+				data: result,
+			})
+		} catch (err) {
+			next(
+				new ErrorResponse('sorry something went wrong. Please try again', 500)
+			)
+		}
 	}
+}
 
+const uploadImages = (req, res, next) => {
+	const logo = req.files.logo
 	const allowedMediaTypes = ['jpg', 'jpeg', 'png', 'mp4', 'mp3']
 	const allowedLogoTypes = ['jpg', 'jpeg', 'png']
 
@@ -100,62 +115,42 @@ const uploadApk = async (req, res, next) => {
 		)
 	}
 
-	//check image type
-	if (!allowedMediaTypes.includes(media.mimetype.split('/')[1])) {
-		return next(
-			new ErrorResponse(
-				`media type ${
-					media.mimetype.split('/')[1]
-				} is not allowed. Allowed media types ${allowedMediaTypes}`,
-				400
-			)
-		)
-	}
+	// //check image type
+	// if (!allowedMediaTypes.includes(media.mimetype.split('/')[1])) {
+	// 	return next(
+	// 		new ErrorResponse(
+	// 			`media type ${
+	// 				media.mimetype.split('/')[1]
+	// 			} is not allowed. Allowed media types ${allowedMediaTypes}`,
+	// 			400
+	// 		)
+	// 	)
+	// }
 
-	//check file size
-	if (media.size > process.env.MAX_FILE_UPLOAD) {
-		return next(
-			new ErrorResponse(
-				`Please upload a file less than ${
-					process.env.MAX_FILE_UPLOAD / 1000000
-				}mb`,
-				400
-			)
-		)
-	}
+	// //check file size
+	// if (media.size > process.env.MAX_FILE_UPLOAD) {
+	// 	return next(
+	// 		new ErrorResponse(
+	// 			`Please upload a file less than ${
+	// 				process.env.MAX_FILE_UPLOAD / 1000000
+	// 			}mb`,
+	// 			400
+	// 		)
+	// 	)
+	// }
 
-	media.name = `${apk.name.split('.')[0]}_${Date.now()}${
-		path.parse(media.name).ext
-	}`
+	const newName = `${logo.name.split('.')[0]}-${Date.now()}${path.extname(
+		logo.name
+	)}`
 
-	logo.name = `${apk.name.split('.')[0]}_${Date.now()}_logo${
-		path.parse(media.name).ext
-	}`
+	const upldPath = path.join(__dirname, '../../frontend/public/img/mediaFiles/')
 
-	const apkFile = apk.mv(`${process.env.APK_FOLDER}/${apk.name}`)
+	const upld = logo.mv(`${upldPath}/${newName}`)
 
-	if (apkFile) {
-		req.body.apk = apk.name
-		req.body.productMedia = media.name
-		req.body.uploadedBy = req.user.id
-		req.body.logo = logo.name
-
-		media.mv(`${process.env.FILE_UPLOAD_PATH}/${media.name}`)
-		logo.mv(`${process.env.FILE_UPLOAD_PATH}/${logo.name}`)
-
-		try {
-			const result = await Product.create(req.body)
-
-			res.status(201).json({
-				success: true,
-				data: result,
-			})
-		} catch (err) {
-			next(
-				new ErrorResponse('sorry something went wrong. Please try again', 500)
-			)
-		}
-	}
+	res.status(201).json({
+		success: true,
+		data: `/img/mediaFiles/${newName}`,
+	})
 }
 
 // @desc      Update apk
@@ -219,10 +214,12 @@ const deleteApk = async (req, res, next) => {
 		)
 	}
 }
+
 module.exports = {
 	getApks,
 	getApk,
 	uploadApk,
 	updateApk,
 	deleteApk,
+	uploadImages,
 }

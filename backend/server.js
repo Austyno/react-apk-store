@@ -17,7 +17,7 @@ const productRoutes = require('./routes/product')
 const categoryRoutes = require('./routes/category')
 const userRoutes = require('./routes/user')
 const reviewRoutes = require('./routes/reviews')
-
+const downloadRoute = require('./routes/download')
 const app = express()
 
 //file upload
@@ -41,14 +41,17 @@ app.use(xss())
 app.use(hpp())
 
 // Set static folder
-app.use(express.static(path.join(__dirname, 'public')))
+// app.use(express.static(path.join(__dirname, '/public')))
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads/')))
 
 //mount routes here
 
-app.use('/api/v1/products', productRoutes)
-app.use('/api/v1/category', categoryRoutes)
-app.use('/api/v1/users', userRoutes)
-app.use('/api/v1/reviews', reviewRoutes)
+app.use('/api/products', productRoutes)
+app.use('/api/category', categoryRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/reviews', reviewRoutes)
+app.use('/api/download',downloadRoute)
 
 // app.get("/api/config/paypal", (req, res) =>
 //   res.send(process.env.PAYPAL_CLIENT_ID)

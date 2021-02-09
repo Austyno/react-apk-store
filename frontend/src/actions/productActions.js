@@ -20,7 +20,7 @@ export const listProducts = () => async (dispatch) => {
 			type: PRODUCT_LIST_REQUEST,
 		})
 
-		const response = await axios.get(`/api/v1/products`)
+		const response = await axios.get(`/api/products`)
 		const data = response.data.data
 
 		dispatch({
@@ -44,7 +44,7 @@ export const fetchProduct = (id) => async (dispatch) => {
 			type: PRODUCT_FETCH_REQUEST,
 		})
 
-		const res = await axios.get(`/api/v1/products/${id}`)
+		const res = await axios.get(`/api/products/${id}`)
 
 		const data = res.data.data
 
@@ -77,7 +77,7 @@ export const similarProducts = (catId) => async (dispatch) => {
 	try {
 		dispatch({ type: SIMILAR_PRODUCT_REQUEST })
 
-		const res = await axios.get(`/api/v1/category/${catId}`)
+		const res = await axios.get(`/api/category/${catId}`)
 
 		const data = res.data.data
 
@@ -102,7 +102,7 @@ export const productReviews = (id) => async (dispatch) => {
 			type: PRODUCT_REVIEWS_REQUEST,
 		})
 
-		const res = await axios.get(`/api/v1/reviews/${id}`)
+		const res = await axios.get(`/api/reviews/${id}`)
 
 		const data = res.data.data
 
