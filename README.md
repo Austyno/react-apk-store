@@ -1,1 +1,1 @@
-This a MERN stack app created to sell apk files. It also has a mobile app written in React Native for both Android and IOS apps
+This a MERN stack app with Redux created to sell apk files. It also has a mobile app written in React Native for both Android and IOS apps
