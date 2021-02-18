@@ -7,7 +7,7 @@ const { protect } = require('../middleware/auth')
 
 const downloadFile = (url) => {
 	return new Promise((resolve, reject) => {
-		let file = fs.createWriteStream('./output.apk')
+		let file = fs.createWriteStream('../downloads/output.apk')
 		http.get(url, (netWorkRes) => {
 			netWorkRes.on('data', (chunk) => {
 				file.write(chunk)
@@ -21,6 +21,7 @@ const downloadFile = (url) => {
 
 router.get('/:id', async (req, res) => {
 	/**TODO: check if the file is downloaded then update the users downloaded apps with the app id */
+
 	const id = req.params.id
 
 	const apkFile = await Product.findById(id)
@@ -28,10 +29,14 @@ router.get('/:id', async (req, res) => {
 	if (!apkFile) {
 		return next(new ErrorResponse('this apk does not exist', 400))
 	}
+	apkFile.totalDownloads = apkFile.totalDownloads + 1
+
 	const url = apkFile.apk
+	apkFile.save()
 
 	try {
 		const downlodedFile = await downloadFile(url)
+
 		res.send(downlodedFile)
 	} catch (error) {
 		res.send(error)

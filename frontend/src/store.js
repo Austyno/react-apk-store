@@ -7,18 +7,21 @@ import {
 	productDetailsReducer,
 	similarProductsReducer,
 	productReviewsReducer,
+	listCategoriesAndProductsReducer,
 } from './reducers/productReducers'
 
 import {
 	userLoginReducer,
-	userRegister,
 	userList,
 	userDelete,
 	userUpdate,
 	getUser,
 	forgotPassword,
 	resetPassword,
+	userRegisterReducer,
 } from './reducers/userReducers'
+
+import { allPostReducer, singlePostReducer } from './reducers/postReducers'
 
 const reducers = combineReducers({
 	productList: productListReducer,
@@ -26,8 +29,17 @@ const reducers = combineReducers({
 	similarProducts: similarProductsReducer,
 	productReviews: productReviewsReducer,
 	userLogin: userLoginReducer,
+	categoriesAndProductsList: listCategoriesAndProductsReducer,
+	allPost: allPostReducer,
+	singlePost: singlePostReducer,
+	register: userRegisterReducer,
 })
-const initialState = {}
+const userInfoFromStorage = localStorage.getItem('userInfo')
+	? JSON.parse(localStorage.getItem('userInfo'))
+	: null
+const initialState = {
+	userInfo: userInfoFromStorage,
+}
 const store = createStore(
 	reducers,
 	initialState,

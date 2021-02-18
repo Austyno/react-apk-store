@@ -5,23 +5,14 @@ const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema(
 	{
-		name: {
+		username: {
 			type: String,
-			required: [true, 'Please add a name'],
-			trim: true,
-		},
-		email: {
-			type: String,
-			required: [true, 'Please add an email'],
-			match: [
-				/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-				'Please add a valid email',
-			],
+			required: true,
 			unique: true,
 		},
 		password: {
 			type: String,
-			minlength: [8, 'Password should be 8 character long'],
+			minlength: [6, 'Password should be 6 character long'],
 			required: [true, 'Please add a password'],
 			select: false,
 		},
@@ -30,7 +21,7 @@ const UserSchema = new mongoose.Schema(
 			enum: ['user', 'admin'],
 			default: 'user',
 		},
-		myApps: [{type: mongoose.Schema.ObjectId,ref: 'Product'}],
+		myApps: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
 		resetPasswordToken: String,
 		resetPasswordExpire: Date,
 		createdAt: {
@@ -47,7 +38,6 @@ const UserSchema = new mongoose.Schema(
 UserSchema.pre('remove', async function (next) {
 	await this.model('Review').deleteMany({ userId: this._id })
 	await this.model('Order').deleteMany({ userId: this._id })
-
 	next()
 })
 

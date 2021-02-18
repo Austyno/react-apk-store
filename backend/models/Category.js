@@ -9,8 +9,18 @@ const CategorySchema = new mongoose.Schema(
 		},
 	},
 	{
+		toJSON: { virtuals: true },
+	},
+	{
 		timestamps: true,
 	}
 )
+
+CategorySchema.virtual('products', {
+	ref: 'Product',
+	localField: '_id',
+	foreignField: 'category',
+	justOne: false,
+})
 
 module.exports = mongoose.model('Category', CategorySchema)

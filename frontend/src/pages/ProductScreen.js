@@ -6,7 +6,7 @@ import Product from '../components/Product'
 import Reviews from '../components/Review'
 import Loader from '../components/Loader'
 import axios from 'axios'
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 
 import {
 	Row,
@@ -19,7 +19,7 @@ import {
 } from 'react-bootstrap'
 // import image from '../images/war_machines_1611642250300_logo.png'
 
-const ProductScreen = ({ match }) => {
+const ProductScreen = ({ history, match }) => {
 	const dispatch = useDispatch()
 	const productState = useSelector((state) => state.productDetails)
 
@@ -45,7 +45,7 @@ const ProductScreen = ({ match }) => {
 		const user = JSON.parse(localStorage.getItem('userInfo'))
 
 		if (!user) {
-			<Redirect to='/login' />
+			return history.push(`/login/${match.params.id}`)
 		}
 
 		await axios.get(`/api/download/${product._id}`)
@@ -118,8 +118,8 @@ const ProductScreen = ({ match }) => {
 													</ListGroupItem>
 													<ListGroupItem>
 														<Card.Subtitle>
-															Uploaded By:{' '}
-															{product.uploadedBy && product.uploadedBy.name}
+															Total Downloads:{' '}
+															{product.totalDownloads && product.totalDownloads}
 														</Card.Subtitle>
 													</ListGroupItem>
 												</ListGroup>

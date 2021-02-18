@@ -1,23 +1,43 @@
 import React, { useEffect } from 'react'
 import { Col, Row, Card, Button, Container, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { listProducts } from '../actions/productActions'
+import {
+	listProducts,
+	listCategoriesAndProducts,
+} from '../actions/productActions'
 import Product from '../components/Product'
 import Edu from '../images/city.svg'
 import Ed from '../images/city2.svg'
 import Slider from '../components/Slider'
 import Logo from '../images/logo2.png'
 import Android from '../images/android.png'
+import MobileSlider from '../components/MobileSlider'
+import { listAllPosts } from '../actions/postActions'
+import Post from '../components/Post'
 
 const HomeScreen = () => {
 	const dispatch = useDispatch()
 	const productList = useSelector((state) => state.productList)
 
-	const { loading, error, products } = productList
+	const { products } = productList
+	const categories = useSelector((state) => state.categoriesAndProductsList)
+
+	const { loading, error, categoriesAndProducts } = categories
+
+	const listpost = useSelector((state) => state.allPost)
+
+	const { posts } = listpost
+
+	//take the latest 3 from post array
+	const displayPost = posts.reverse().slice(0, 4)
 
 	useEffect(() => {
-		dispatch(listProducts())
+		dispatch(listCategoriesAndProducts())
+		dispatch(listProducts)
+		dispatch(listAllPosts())
 	}, [dispatch])
+
+	// useScript('./js/off-canvas.js')
 
 	return (
 		<>
@@ -32,7 +52,46 @@ const HomeScreen = () => {
 							<Slider />
 						</Col>
 						<Col md={4}>
-							<Card>
+							{/* for mobile */}
+							<Container>
+								<Row className='cat mt-3'>
+									<Card.Body className='catbody' style={{ width: '50px' }}>
+										<Image
+											className='mb-3 ml-4'
+											src={Android}
+											style={{ height: '30px' }}
+										/>
+										<Card.Text className='ml-2'>Games</Card.Text>
+									</Card.Body>
+
+									<Card.Body
+										className='catbody'
+										style={{
+											width: '50px',
+										}}>
+										<Image
+											className='mb-3 ml-4'
+											src={Android}
+											style={{ height: '30px' }}
+										/>
+										<Card.Text className='ml-2'>Games</Card.Text>
+									</Card.Body>
+
+									<Card.Body className='catbody' style={{ width: '50px' }}>
+										<Image
+											className='mb-3 ml-4'
+											src={Android}
+											style={{ height: '30px' }}
+										/>
+										<Card.Text className='ml-2'>Games</Card.Text>
+									</Card.Body>
+								</Row>
+							</Container>
+
+							{/* mobilescroll */}
+							<MobileSlider products={products} />
+
+							<Card className='sideBar'>
 								<Card.Img src={Edu} style={{ height: '187px' }} />
 								<Card.Footer
 									style={{
@@ -59,7 +118,7 @@ const HomeScreen = () => {
 									</Row>
 								</Card.Footer>
 							</Card>
-							<Card>
+							<Card className='sideBar'>
 								<Card.Img src={Ed} style={{ height: '187px' }} />
 								<Card.Footer
 									className=''
@@ -89,24 +148,43 @@ const HomeScreen = () => {
 							</Card>
 						</Col>
 					</Row>
-					<Row className='mt-3'>
+
+					<Row className='mt-3 sideBar'>
+						{/* category and products */}
 						<Col md={8}>
-							<Card style={{ backgroundColor: '#FFFFFF' }}>
-								<Card.Header>
-									<Card.Text style={{ float: 'left' }}>Discover Apps</Card.Text>
-									<Card.Text style={{ float: 'right' }}>
-										More <i className='fa fa-angle-double-right'></i>
-									</Card.Text>
-								</Card.Header>
-								<Card.Body>
-									<Row>
-										{products.map((product) => (
-											<Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-												<Product product={product} />
-											</Col>
-										))}
-									</Row>
-								</Card.Body>
+							{categoriesAndProducts &&
+								categoriesAndProducts.map((cp) => (
+									<Card className='mt-4' style={{ backgroundColor: '#FFFFFF' }}>
+										<Card.Header>
+											<Card.Text
+												as='p'
+												style={{
+													float: 'left',
+													fontFamily: 'American Typewriter',
+													fontWeight: 'bold',
+												}}>
+												{cp.categoryName}
+											</Card.Text>
+											<Card.Text style={{ float: 'right' }}>
+												More <i className='fa fa-angle-double-right'></i>
+											</Card.Text>
+										</Card.Header>
+										<Card.Body>
+											<Row>
+												{cp.products.map((product) => (
+													<Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+														<Product product={product} />
+													</Col>
+												))}
+											</Row>
+										</Card.Body>
+									</Card>
+								))}
+							{/* blog topics */}
+							<Card className='mt-4' style={{ backgroundColor: '#FFFFFF' }}>
+								<Row className='py-3 p-3'>
+									{displayPost && displayPost.map((p) => <Post post={p} />)}
+								</Row>
 							</Card>
 						</Col>
 						<Col md={4}>

@@ -11,6 +11,9 @@ import {
 	PRODUCT_REVIEWS_REQUEST,
 	PRODUCT_REVIEWS_SUCCESS,
 	PRODUCT_REVIEWS_FAIL,
+	PRODUCT_CATEGORY_REQUEST,
+	PRODUCT_CATEGORY_SUCCESS,
+	PRODUCT_CATEGORY_FAIL,
 } from '../constants/productConstants'
 export const productListReducer = (state = { products: [] }, action) => {
 	switch (action.type) {
@@ -57,6 +60,23 @@ export const productReviewsReducer = (state = { reviews: [] }, action) => {
 		case PRODUCT_REVIEWS_SUCCESS:
 			return { loading: false, reviews: action.payload }
 		case PRODUCT_REVIEWS_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+//GET all categories and their products for display on home page
+export const listCategoriesAndProductsReducer = (
+	state = { categoriesAndProducts: [] },
+	action
+) => {
+	switch (action.type) {
+		case PRODUCT_CATEGORY_REQUEST:
+			return { loading: true, categoriesAndProducts: [] }
+		case PRODUCT_CATEGORY_SUCCESS:
+			return { loading: false, categoriesAndProducts: action.payload }
+		case PRODUCT_CATEGORY_FAIL:
 			return { loading: false, error: action.payload }
 		default:
 			return state

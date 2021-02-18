@@ -8,10 +8,7 @@ const {
 	getProducts,
 } = require('../controllers/category')
 
-router
-	.route('/')
-	.get(protect, authorize, getCategories)
-	.post(protect, authorize, addCategory)
+router.route('/').get(getCategories).post(protect, authorize, addCategory)
 
 router
 	.route('/:id')

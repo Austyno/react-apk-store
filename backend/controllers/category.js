@@ -16,7 +16,9 @@ exports.addCategory = async (req, res, next) => {
 }
 
 exports.getCategories = async (req, res, next) => {
-	const cat = await Category.find()
+	// Todo: find out how to populate and return only where approved is true
+	const cat = await Category.find().populate('products', 'name logo')
+
 	res.status(200).json({
 		success: true,
 		count: cat.length,

@@ -6,40 +6,41 @@ const sendEmail = require('../utils/sendEmail')
 const generateJwtToken = require('../utils/jwtToken')
 
 // @desc      Create user
-// @route     POST /api/v1/auth/register
+// @route     POST /api/users/register
 // @access    Public
 exports.register = async (req, res, next) => {
-	const { name, email, phone } = req.body
+	const { username, password } = req.body
 
-	//check if user email already exist
-	const userEmailExist = await User.findOne({ email })
+	//check if username already exist
+	const userNameExist = await User.findOne({ username })
 
-	if (userEmailExist !== null) {
-		return next(new ErrorResponse(`A user with ${email} already exist`, 400))
+	if (userNameExist !== null) {
+		return next(new ErrorResponse(`A user with ${username} already exist`, 400))
 	}
 
 	const salt = await bcrypt.genSalt(10)
 
-	const hashPassword = await bcrypt.hash(req.body.password, salt)
+	const hashPassword = await bcrypt.hash(password, salt)
 
-	const password = hashPassword
+	// try {
+	const user = await new User({
+		username: username,
+		password: hashPassword,
+	}).save()
+	const token = generateJwtToken(user._id)
 
-	try {
-		const user = await new User({ name, email, phone, password }).save()
-		const token = generateJwtToken(user._id)
-
-		res.status(201).json({
-			success: true,
-			token,
-		})
-	} catch (e) {
-		next(
-			new ErrorResponse(
-				'sorry we could not register you now . please try again',
-				500
-			)
-		)
-	}
+	res.status(201).json({
+		success: true,
+		token,
+	})
+	// } catch (e) {
+	// 	next(
+	// 		new ErrorResponse(
+	// 			'sorry we could not register you now . please try again',
+	// 			500
+	// 		)
+	// 	)
+	// }
 }
 
 // @desc      Login User
@@ -99,7 +100,7 @@ exports.forgotPassword = async (req, res, next) => {
 
 	const resetUrl = `${req.protocol}://${req.get(
 		'host'
-	)}/api/v1/auth/resetpassword/${resetToken}`
+	)}/api/auth/resetpassword/${resetToken}`
 
 	const message = `You are receiving this email because you (or someone else) has requested the reset of a password. \n\n ${resetUrl}`
 

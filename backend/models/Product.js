@@ -19,9 +19,9 @@ const ProductSchema = new mongoose.Schema(
 			type: [String],
 			required: [true, 'Image or video is required'],
 		},
-		brand: {
-			type: String,
-			trim: true,
+		totalDownloads: {
+			type: Number,
+			default: 0
 		},
 		price: {
 			type: Number,

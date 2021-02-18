@@ -1,52 +1,59 @@
 import React from 'react'
-import {
-	Navbar,
-	Nav,
-	Form,
-	FormControl,
-	Image,
-	FormGroup,
-} from 'react-bootstrap'
+import { Nav, Image } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-
 import Logo from '../images/logo2.png'
 import Android from '../images/android.png'
-import Game from '../images/gamepad.jpeg'
-import Bubble from '../images/chatbubble.png'
-import Tech from '../images/tech.jpeg'
+import Game from '../images/game.png'
+import Topics from '../images/topics.png'
+import Tech from '../images/products.png'
+import './css/off-canvas.css'
 
 const Header = () => {
+	const toggleDrawer = () => {
+		document.querySelector('.offcanvas-collapse').classList.toggle('open')
+	}
+
 	return (
 		<header>
-			<Navbar
-				bg='light'
-				expand='lg'
-				navbar='light'
-				className='justify-content-between'>
-				<LinkContainer to='/'>
-					<Navbar.Brand>
-						<Image
-							src={Logo}
-							style={{
-								height: '50px',
-								border: '5px solid black',
-								padding: '5px',
-							}}
-						/>
-					</Navbar.Brand>
-				</LinkContainer>
+			<nav
+				style={{
+					fontFamily: 'American Typewriter',
+					fontWeight: 'bold',
+				}}
+				className='navbar navbar-expand-lg fixed-top navbar-light bg-light'
+				aria-label='Main navigation'>
+				<div className='container-fluid'>
+					<Image
+						src={Logo}
+						className='mr-5'
+						style={{
+							height: '50px',
+							border: '4px solid black',
+							padding: '5px',
+							borderRadius: '2px',
+						}}
+					/>
+					<button
+						onClick={toggleDrawer}
+						className='navbar-toggler p-0 border-0'
+						type='button'
+						data-bs-toggle='offcanvas'
+						aria-label='Toggle navigation'>
+						<span className='navbar-toggler-icon'></span>
+					</button>
 
-				<Navbar.Toggle aria-controls='basic-navbar-nav' />
-				<Navbar.Collapse id='basic-navbar-nav'>
-					<Nav className='mr-auto'>
+					<div
+						className='navbar-collapse offcanvas-collapse mt-2 mx-auto'
+						id='navbarsExampleDefault'>
+						{/* <ul className='navbar-nav me-auto mb-2 mb-lg-0 mt-2'> */}
 						<LinkContainer to='/'>
 							<Nav.Link
 								className='mr-3'
 								style={{
-									fontFamily: 'Luminari, fantasy',
+									fontFamily: 'American Typewriter',
 									fontWeight: 'bold',
 								}}>
-								<Image className='mr-2' src={Game} style={{ height: '30px' }} />
+								<Image className='mr-3' src={Game} style={{ height: '30px' }} />
 								Home
 							</Nav.Link>
 						</LinkContainer>
@@ -58,14 +65,14 @@ const Header = () => {
 									fontWeight: 'bold',
 								}}>
 								<Image
-									className='mr-2'
+									className='mr-3'
 									src={Android}
 									style={{ height: '30px' }}
 								/>
 								APPS
 							</Nav.Link>
 						</LinkContainer>
-						<LinkContainer to='/blog'>
+						<LinkContainer to='/post'>
 							<Nav.Link
 								className='mr-3 navFont'
 								style={{
@@ -73,8 +80,8 @@ const Header = () => {
 									fontWeight: 'bold',
 								}}>
 								<Image
-									className='mr-2'
-									src={Bubble}
+									className='mr-3'
+									src={Topics}
 									style={{ height: '25px' }}
 								/>
 								TOPICS
@@ -82,28 +89,30 @@ const Header = () => {
 						</LinkContainer>
 						<LinkContainer to='/apps'>
 							<Nav.Link
-								className='mr-2'
+								className='mr-3'
 								style={{
 									fontFamily: 'American Typewriter',
 									fontWeight: 'bold',
 								}}>
-								<Image className='mr-2' src={Tech} style={{ height: '25px' }} />
+								<Image className='mr-3' src={Tech} style={{ height: '25px' }} />
 								PRODUCTS
 							</Nav.Link>
 						</LinkContainer>
-					</Nav>
-					<Form inline>
-						<FormGroup style={{ float: 'right' }}>
-							<FormControl
-								type='text'
+
+						<form className='d-flex ml-auto'>
+							<input
+								className='form-control mr-2'
+								type='search'
 								placeholder='Search'
-								className='mr-sm-2'
+								aria-label='Search'
 							/>
-							{/* <i className='fa fa-search fa-2x'></i> */}
-						</FormGroup>
-					</Form>
-				</Navbar.Collapse>
-			</Navbar>
+							<button className='btn btn-outline-success' type='submit'>
+								Search
+							</button>
+						</form>
+					</div>
+				</div>
+			</nav>
 		</header>
 	)
 }
