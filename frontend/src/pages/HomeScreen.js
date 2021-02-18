@@ -182,6 +182,20 @@ const HomeScreen = () => {
 								))}
 							{/* blog topics */}
 							<Card className='mt-4' style={{ backgroundColor: '#FFFFFF' }}>
+								<Card.Header>
+									<Card.Text
+										as='p'
+										style={{
+											float: 'left',
+											fontFamily: 'American Typewriter',
+											fontWeight: 'bold',
+										}}>
+										Latest News
+									</Card.Text>
+									<Card.Text style={{ float: 'right' }}>
+										More <i className='fa fa-angle-double-right'></i>
+									</Card.Text>
+								</Card.Header>
 								<Row className='py-3 p-3'>
 									{displayPost && displayPost.map((p) => <Post post={p} />)}
 								</Row>
