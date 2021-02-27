@@ -12,6 +12,9 @@ body {
 .app{
   display: none;
 }
+.mobile-nav{
+  display: none;
+}
 
 @media (max-width: 991.98px) {
   .offcanvas-collapse {
@@ -24,7 +27,7 @@ body {
     padding-left: 1rem;
     overflow-y: auto;
     visibility: hidden;
-    background-color:#E8EFFF;
+    background-color:#F7F7F7;
     /* background-color:#f8f8f8ed; */
     transition: transform .3s ease-in-out, visibility .3s ease-in-out;
   }
@@ -109,7 +112,10 @@ body {
 
 @media(max-width:480px){
 
-
+.mobile-nav{
+    display:block;
+  }
+  
 ol, li {
   list-style: none;
   margin: 0;
@@ -168,7 +174,8 @@ ul{
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  background-color: #6c757d; 
+  background-color: #c5cacd; 
+  /* background-color: #6c757d;  */
 }
 
 }

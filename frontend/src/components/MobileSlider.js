@@ -11,19 +11,19 @@ const MobileSlider = ({ products }) => {
 					</Card.Text>
 				</Card.Header>
 				<ol className='hs full '>
-					{/* {products &&
+					{products &&
 						products.map((p) => (
 							<li>
-								<Card.Img src={p.logo} style={{ width: '60px' }} />
+								<Card.Img src={p.logo} style={{ width: '100%' }} />
 							</li>
-						))} */}
-					<li>test1</li>
+						))}
+					{/* <li>test1</li>
 					<li>test2</li>
 					<li>test3</li>
 					<li>test4</li>
 					<li>test5</li>
 					<li>test6</li>
-					<li>test7</li>
+					<li>test7</li> */}
 				</ol>
 			</Card>
 		</>

@@ -13,31 +13,41 @@ import Logo from '../images/logo2.png'
 import Android from '../images/android.png'
 import MobileSlider from '../components/MobileSlider'
 import { listAllPosts } from '../actions/postActions'
+import { getAllCategory } from '../actions/categoryActions'
 import Post from '../components/Post'
+import TabComponent from '../components/TabComponent'
+import EditorsChoice from '../components/EditorsChoice'
 
 const HomeScreen = () => {
 	const dispatch = useDispatch()
 	const productList = useSelector((state) => state.productList)
 
 	const { products } = productList
-	const categories = useSelector((state) => state.categoriesAndProductsList)
+	const productCategories = useSelector(
+		(state) => state.categoriesAndProductsList
+	)
 
-	const { loading, error, categoriesAndProducts } = categories
+	const { loading, error, categoriesAndProducts } = productCategories
 
 	const listpost = useSelector((state) => state.allPost)
 
 	const { posts } = listpost
 
+	const allCategories = useSelector((state) => state.allCategories)
+
+	const { categories } = allCategories
+
+	const mobileCat = categories.slice(0, 3)
+
 	//take the latest 3 from post array
-	const displayPost = posts.reverse().slice(0, 4)
+	const displayPost = posts ? posts.slice(0, 4) : ''
 
 	useEffect(() => {
 		dispatch(listCategoriesAndProducts())
 		dispatch(listProducts)
 		dispatch(listAllPosts())
+		dispatch(getAllCategory())
 	}, [dispatch])
-
-	// useScript('./js/off-canvas.js')
 
 	return (
 		<>
@@ -55,36 +65,19 @@ const HomeScreen = () => {
 							{/* for mobile */}
 							<Container>
 								<Row className='cat mt-3'>
-									<Card.Body className='catbody' style={{ width: '50px' }}>
-										<Image
-											className='mb-3 ml-4'
-											src={Android}
-											style={{ height: '30px' }}
-										/>
-										<Card.Text className='ml-2'>Games</Card.Text>
-									</Card.Body>
-
-									<Card.Body
-										className='catbody'
-										style={{
-											width: '50px',
-										}}>
-										<Image
-											className='mb-3 ml-4'
-											src={Android}
-											style={{ height: '30px' }}
-										/>
-										<Card.Text className='ml-2'>Games</Card.Text>
-									</Card.Body>
-
-									<Card.Body className='catbody' style={{ width: '50px' }}>
-										<Image
-											className='mb-3 ml-4'
-											src={Android}
-											style={{ height: '30px' }}
-										/>
-										<Card.Text className='ml-2'>Games</Card.Text>
-									</Card.Body>
+									{mobileCat &&
+										mobileCat.map((cat) => (
+											<Card.Body className='catbody' style={{ width: '50px' }}>
+												<Image
+													className='mb-3 ml-4'
+													src={Android}
+													style={{ height: '30px' }}
+												/>
+												<Card.Text className='ml-2'>
+													{cat.categoryName}
+												</Card.Text>
+											</Card.Body>
+										))}
 								</Row>
 							</Container>
 
@@ -148,13 +141,12 @@ const HomeScreen = () => {
 							</Card>
 						</Col>
 					</Row>
-
-					<Row className='mt-3 sideBar'>
+					<Row className=' sideBar'>
 						{/* category and products */}
 						<Col md={8}>
 							{categoriesAndProducts &&
 								categoriesAndProducts.map((cp) => (
-									<Card className='mt-4' style={{ backgroundColor: '#FFFFFF' }}>
+									<Card className='mb-3' style={{ backgroundColor: '#FFFFFF' }}>
 										<Card.Header>
 											<Card.Text
 												as='p'
@@ -172,7 +164,7 @@ const HomeScreen = () => {
 										<Card.Body>
 											<Row>
 												{cp.products.map((product) => (
-													<Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+													<Col key={product._id} sm={12} md={4} lg={3} xl={3}>
 														<Product product={product} />
 													</Col>
 												))}
@@ -181,7 +173,7 @@ const HomeScreen = () => {
 									</Card>
 								))}
 							{/* blog topics */}
-							<Card className='mt-4' style={{ backgroundColor: '#FFFFFF' }}>
+							<Card className='mt-3' style={{ backgroundColor: '#FFFFFF' }}>
 								<Card.Header>
 									<Card.Text
 										as='p'
@@ -200,46 +192,53 @@ const HomeScreen = () => {
 									{displayPost && displayPost.map((p) => <Post post={p} />)}
 								</Row>
 							</Card>
+							{/* end latest news */}
+
+							{/* tabs with hover	 */}
+							<TabComponent tab1='Games' tab2='Apps' catName='Trending Now' />
+							{/* end tabs with hover */}
 						</Col>
+
 						<Col md={4}>
 							<Card className='my-2 p-3' style={{ background: '#FFFFFF' }}>
 								<Card.Body>
-									<Container>
-										<Row>
-											<Col md={4}>
-												<Image
-													src={Logo}
-													style={{
-														height: '50px',
-														border: '5px solid black',
-														padding: '5px',
-													}}
-												/>
-											</Col>
-											<Col md={8}>
-												<Card.Title
-													style={{
-														fontFamily: 'Baskerville',
-														fontWeight: 'bold',
-														color: '#157298',
-													}}>
-													QubAngel App
-												</Card.Title>
-												<Card.Text
-													className='text-muted'
-													style={{ fontFamily: 'Helvetica Neue' }}>
-													Get the Qubangel App and stay updated on the go!
-												</Card.Text>
-											</Col>
-										</Row>
-										<Row className='mt-2'>
-											<Button className='btn btn-primary w-100'>
-												Download Apk - v1.1
-											</Button>
-										</Row>
-									</Container>
+									{/* <Container> */}
+									<Row>
+										<Col md={4}>
+											<Image
+												src={Logo}
+												style={{
+													height: '50px',
+													border: '5px solid black',
+													padding: '5px',
+												}}
+											/>
+										</Col>
+										<Col md={8}>
+											<Card.Title
+												style={{
+													fontFamily: 'Baskerville',
+													fontWeight: 'bold',
+													color: '#157298',
+												}}>
+												QubAngel App
+											</Card.Title>
+											<Card.Text
+												className='text-muted'
+												style={{ fontFamily: 'Helvetica Neue' }}>
+												Get the Qubangel App and stay updated on the go!
+											</Card.Text>
+										</Col>
+									</Row>
+									<Row className='mt-2'>
+										<Button className='btn btn-primary w-100'>
+											Download Apk - v1.1
+										</Button>
+									</Row>
+									{/* </Container> */}
 								</Card.Body>
 							</Card>
+							<EditorsChoice />
 						</Col>
 					</Row>
 				</>

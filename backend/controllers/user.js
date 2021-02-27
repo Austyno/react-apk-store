@@ -9,38 +9,42 @@ const generateJwtToken = require('../utils/jwtToken')
 // @route     POST /api/users/register
 // @access    Public
 exports.register = async (req, res, next) => {
-	const { username, password } = req.body
+	const { email, password } = req.body
 
-	//check if username already exist
-	const userNameExist = await User.findOne({ username })
+	//check if email already exist
+	const emailExist = await User.findOne({ email })
 
-	if (userNameExist !== null) {
-		return next(new ErrorResponse(`A user with ${username} already exist`, 400))
+	if (emailExist !== null) {
+		return next(new ErrorResponse(`A user with ${email} already exist`, 400))
 	}
 
 	const salt = await bcrypt.genSalt(10)
 
 	const hashPassword = await bcrypt.hash(password, salt)
 
-	// try {
-	const user = await new User({
-		username: username,
-		password: hashPassword,
-	}).save()
-	const token = generateJwtToken(user._id)
+	try {
+		const user = await new User({
+			email: email,
+			password: hashPassword,
+		}).save()
 
-	res.status(201).json({
-		success: true,
-		token,
-	})
-	// } catch (e) {
-	// 	next(
-	// 		new ErrorResponse(
-	// 			'sorry we could not register you now . please try again',
-	// 			500
-	// 		)
-	// 	)
-	// }
+		const token = generateJwtToken(user._id)
+
+		user.password = ''
+
+		res.status(201).json({
+			success: true,
+			userData: user,
+			token,
+		})
+	} catch (e) {
+		next(
+			new ErrorResponse(
+				'sorry we could not register you now . please try again',
+				500
+			)
+		)
+	}
 }
 
 // @desc      Login User

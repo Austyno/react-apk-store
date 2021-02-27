@@ -8,23 +8,25 @@ import {
 	USER_REGISTER_FAIL,
 } from '../constants/userConstants'
 
-export const userLoginReducer = (state = {}, action) => {
+export const userLoginReducer = (state = { userInfo: {} }, action) => {
 	switch (action.type) {
 		case USER_AUTH_START:
 			return {
 				loading: true,
+				userInfo: {},
 			}
 		case USER_AUTH_SUCCESS:
 			return {
+				loading: false,
 				userInfo: action.payload,
-				success: true,
 			}
 		case USER_AUTH_FAIL:
 			return {
+				loading: false,
 				error: action.payload,
 			}
 		case RESET:
-			return {}
+			return { userInfo: {} }
 
 		default:
 			return state

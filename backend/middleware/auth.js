@@ -32,7 +32,7 @@ exports.protect = async (req, res, next) => {
 }
 
 // Grant access to specific roles
-exports.authorize = (req, res, next) => {
+exports.admin = (req, res, next) => {
 	if (req.user.role == 'admin') {
 		return next()
 	}

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { protect, authorize } = require('../middleware/auth')
+const { protect, admin } = require('../middleware/auth')
 const {
 	getApks,
 	getApk,
@@ -7,7 +7,14 @@ const {
 	updateApk,
 	deleteApk,
 	uploadImages,
+	getEditorsChoice,
+	allApps,
+	getApprovedAndUnapprovedApps,
 } = require('../controllers/product')
+
+router.route('/editor').get(getEditorsChoice)
+router.route('/apps').get(allApps)
+router.route('/admin/apps').get(protect, admin, getApprovedAndUnapprovedApps)
 
 router.route('/').get(getApks).post(protect, uploadApk)
 router.route('/upload').post(protect, uploadImages)
@@ -16,6 +23,6 @@ router
 	.route('/:id')
 	.get(getApk)
 	.put(protect, updateApk)
-	.delete(protect, authorize, deleteApk)
+	.delete(protect, admin, deleteApk)
 
 module.exports = router

@@ -215,6 +215,66 @@ const deleteApk = async (req, res, next) => {
 	}
 }
 
+const getEditorsChoice = async (req, res, next) => {
+	try {
+		// const editorchoice = await Product.find({
+		// 	$and: [{ isApproved: true }, { editorsChoice: true }],
+		// })
+		const editorchoice = await Product.find({
+			isApproved: true,
+		})
+			.populate('category', 'categoryName')
+			.select('-apk')
+
+		res.status(200).json({
+			success: true,
+			data: editorchoice,
+		})
+	} catch (error) {
+		next(
+			new ErrorResponse(
+				`sorry something went wrong. Please reload your browser`,
+				500
+			)
+		)
+	}
+}
+const allApps = async (req, res, next) => {
+	try {
+		const apps = await Product.find({ isApproved: true })
+
+		res.status(200).json({
+			success: true,
+			data: apps,
+		})
+	} catch (error) {
+		next(new ErrorResponse('something went wrong', 500))
+	}
+}
+
+//for admin
+const getApprovedAndUnapprovedApps = async (req, res, next) => {
+	try {
+		const allApks = await Product.find()
+			.populate('uploadedBy', 'name email')
+			.populate('category', 'categoryName')
+			.select('-apk')
+
+		res.status(200).json({
+			success: true,
+			count: allApks.length,
+			data: allApks,
+		})
+	} catch (error) {
+		next(
+			new ErrorResponse(
+				`sorry something went wrong. Please reload your browser`,
+				500
+			)
+		)
+	}
+}
+
 module.exports = {
 	getApks,
 	getApk,
@@ -222,5 +282,8 @@ module.exports = {
 	updateApk,
 	deleteApk,
 	uploadImages,
+	getEditorsChoice,
+	allApps,
+	getApprovedAndUnapprovedApps,
 }
 // t5cLH3Bv3Et&@fD

@@ -8,6 +8,10 @@ import {
 	similarProductsReducer,
 	productReviewsReducer,
 	listCategoriesAndProductsReducer,
+	editorsChoiceReducer,
+	getAllAppsReducer,
+	getAdminAppsReducer,
+	editProductReducer,
 } from './reducers/productReducers'
 
 import {
@@ -23,6 +27,8 @@ import {
 
 import { allPostReducer, singlePostReducer } from './reducers/postReducers'
 
+import { allCategoryReducer } from './reducers/categoryReducer'
+
 const reducers = combineReducers({
 	productList: productListReducer,
 	productDetails: productDetailsReducer,
@@ -33,6 +39,11 @@ const reducers = combineReducers({
 	allPost: allPostReducer,
 	singlePost: singlePostReducer,
 	register: userRegisterReducer,
+	editorsChoice: editorsChoiceReducer,
+	allApps: getAllAppsReducer,
+	allCategories: allCategoryReducer,
+	allAppsForAdmin: getAdminAppsReducer,
+	editedProduct: editProductReducer,
 })
 const userInfoFromStorage = localStorage.getItem('userInfo')
 	? JSON.parse(localStorage.getItem('userInfo'))

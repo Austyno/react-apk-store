@@ -1,19 +1,39 @@
 import React from 'react'
-import { Spinner } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
+import './css/loader1.css'
 
 const Loader = () => {
 	return (
-		<Spinner
-			animation='border'
-			role='status'
-			style={{
-				width: '80px',
-				height: '80px',
-				margin: 'auto',
-				display: 'block',
-			}}>
-			<span className='sr-only'>Loading...</span>
-		</Spinner>
+		<>
+			<Container className='mt-5'>
+				<div className='boxes'>
+					<div className='box'>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+					<div className='box'>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+					<div className='box'>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+					<div className='box'>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+			</Container>
+		</>
 	)
 }
 

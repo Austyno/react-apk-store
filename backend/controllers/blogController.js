@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/errorResponse')
 
 exports.allPost = async (req, res, next) => {
 	try {
-		const allPost = await Blog.find({})
+		const allPost = await Blog.find({}).sort({createdAt: -1})
 		res.status(200).json({
 			success: true,
 			data: allPost,

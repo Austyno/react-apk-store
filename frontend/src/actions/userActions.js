@@ -6,6 +6,7 @@ import {
 	USER_REGISTER_START,
 	USER_REGISTER_SUCCESS,
 	USER_REGISTER_FAIL,
+	RESET,
 } from '../constants/userConstants'
 
 export const login = (email, password) => async (dispatch) => {
@@ -17,8 +18,8 @@ export const login = (email, password) => async (dispatch) => {
 			password,
 		}
 
-		await axios.post(`/api/auth/login`, authData).then((resp) => {
-			const authData = resp.data.userData
+		await axios.post(`/api/users/login`, authData).then((resp) => {
+			const authData = resp.data
 			const token = resp.data.token
 
 			const userInfo = {
@@ -35,27 +36,24 @@ export const login = (email, password) => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: USER_AUTH_FAIL,
-			payload:
-				error.response && error.response.data.error
-					? error.response.data.error
-					: error.message,
+			payload: error.message,
 		})
 	}
 }
 
-export const register = (username, password) => async (dispatch) => {
+export const register = (email, password) => async (dispatch) => {
 	try {
 		dispatch({ type: USER_REGISTER_START })
 
 		const registerData = {
-			username,
+			email,
 			password,
 		}
 
 		const res = await axios.post(`/api/users/register`, registerData)
 		const data = res.data
 
-		localStorage.setItem('userInfo',JSON.stringify(data))
+		localStorage.setItem('userInfo', JSON.stringify(data))
 
 		dispatch({
 			type: USER_REGISTER_SUCCESS,
@@ -70,4 +68,12 @@ export const register = (username, password) => async (dispatch) => {
 					: error.message,
 		})
 	}
+}
+
+export const LogoutUser = () => (dispatch) => {
+	localStorage.removeItem('userInfo')
+
+	dispatch({
+		type: RESET,
+	})
 }

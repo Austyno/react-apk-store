@@ -41,7 +41,7 @@ const ProductScreen = ({ history, match }) => {
 		dispatch(fetchProduct(match.params.id))
 	}, [dispatch, match])
 
-	const getApk = async () => {
+	const download = async () => {
 		const user = JSON.parse(localStorage.getItem('userInfo'))
 
 		if (!user) {
@@ -86,7 +86,7 @@ const ProductScreen = ({ history, match }) => {
 													<ListGroupItem>
 														{product.price === 0 ? (
 															<Button
-																onClick={getApk}
+																onClick={download}
 																className='btn btn-primary'>
 																Download
 															</Button>

@@ -37,6 +37,10 @@ const ProductSchema = new mongoose.Schema(
 			ref: 'User',
 			required: true,
 		},
+		editorsChoice: {
+			type: Boolean,
+			default: false
+		},
 		version: {
 			type: String,
 		},

@@ -23,9 +23,87 @@ code {
   box-shadow: 1px 1px 5px rgb(0 0 0 / 10%);
 }
 .post-card:hover{
-box-shadow: 3px 10px 40px rgb(0,0,0,.3);
+box-shadow: 3px 5px 10px rgb(0,0,0,.3);
 }
 
-/* trbl  */
+.tablink-container{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-evenly;
+  width: 150px;
+  background-color: antiquewhite;
+}
+.tab .tablink.active {
+  background-color: #ffff;
+  border-top: 3px solid #157298;
+  height: 50px;
+  border-left: 1px solid #f2F2F2;
+  border-right: 1px solid #f2F2F2;
+  float:right
+
+}
+.tablink{
+padding-left: 3px;
+}
+
+/* nav tabs */
+.nav-tabs{
+  border: none;
+}
+
+.nav-tabs .nav-item .nav-link{
+  border: none;
+  position: relative;
+}
+
+.nav-tabs .nav-item .nav-link::before{
+  content: '';
+  position: absolute;
+  width:0;
+  height:3px;
+  background:#157298;
+  position:absolute;
+  left: 50%;
+  bottom: -3px;
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+.nav-tabs .nav-item .nav-link.active{
+
+  border-top: 3px solid #157298;
+}
+
+.nav-tabs .nav-item .nav-link:hover::before{
+  left: 0;
+  width: 100%;
+}
+
+.nav-tabs .nav-item .nav-link.active::before{
+  width: 0;
+}
+
+.tab-content{
+  padding: 10px;
+}
+
+.tab-pane{
+  display: block;
+  position: relative;
+  left: 100%;
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+.tab-pane.active{
+  left: 0;
+}
+.apps-card{
+  box-shadow: 1px 1px 5px rgb(0 0 0 / 10%);
+}
+.apps-card:hover{
+  box-shadow: 3px 5px 5px rgb(0,0,0,.3);
+}
+
 
 

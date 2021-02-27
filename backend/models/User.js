@@ -5,10 +5,14 @@ const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema(
 	{
-		username: {
+		email: {
 			type: String,
 			required: true,
-			unique: true,
+			unique: [true, 'this email is already in use'],
+			match: [
+				/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+				'please enter a valid email',
+			],
 		},
 		password: {
 			type: String,

@@ -1,41 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../actions/userActions'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
+import React, { useState } from 'react'
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import Tl from '../images/telegram.png'
 import Wh from '../images/whatsapp.jpg'
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { register } from '../actions/userActions'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
 import { Link } from 'react-router-dom'
 
-const LoginScreen = ({ match, history }) => {
+const SignUpScreen = ({ match, history }) => {
 	const dispatch = useDispatch()
+	//get state after signup
+	const regMsg = useSelector((state) => state.register)
 
-	const loggedin = useSelector((state) => state.userLogin)
+	const { loading, error, userInfo } = regMsg
 
-	const { loading, error, userInfo } = loggedin
-
-	const [formState, setFomState] = useState({
-		email: '',
-		password: '',
-	})
-
-	// useEffect(() => {
-	// 	const user = JSON.parse(localStorage.getItem('userInfo'))
-	// 	if (user) {
-	// 		if (user.userData.role === 'admin') {
-	// 			history.push('/admin/products/')
-	// 		}
-	// 	}
-	// }, [history])
-
-	if (userInfo && userInfo.userData) {
+	//redirect back to single product page with the product id if present
+	if (userInfo.success) {
 		setTimeout(() => {
 			const id = match.params.id
-
-			if (userInfo.userData.role === 'admin') {
-				return history.push('/admin/products')
-			}
 			if (id) {
 				history.push(`/product/${id}`)
 			} else {
@@ -44,6 +27,10 @@ const LoginScreen = ({ match, history }) => {
 		}, 1000)
 	}
 
+	const [formState, setFomState] = useState({
+		email: '',
+		password: '',
+	})
 	const handleChange = (e) => {
 		const name = e.target.name
 		const value = e.target.value
@@ -54,22 +41,21 @@ const LoginScreen = ({ match, history }) => {
 		})
 	}
 
-	const submitHandler = (e) => {
+	const submitHandle = (e) => {
 		e.preventDefault()
 
 		const password = formState.password
 		const email = formState.email
 
-		dispatch(login(email, password))
+		dispatch(register(email, password))
 	}
-
 	return (
 		<>
 			<Container className='mb-3'>
 				{loading && <Loader />}
 				{error && <Message>{error}</Message>}
-				{userInfo && userInfo.success === true ? (
-					<Message variant='success'>Congrats login Successful</Message>
+				{userInfo.success === true ? (
+					<Message variant='success'>Congrats Sign up Successful</Message>
 				) : (
 					''
 				)}
@@ -82,7 +68,7 @@ const LoginScreen = ({ match, history }) => {
 								fontFamily: 'American Typewriter',
 								fontWeight: 'bold',
 							}}>
-							User Login
+							User Registration
 						</Card.Text>
 						<Form className='form-horizontal'>
 							<div className='form-group'>
@@ -120,8 +106,8 @@ const LoginScreen = ({ match, history }) => {
 								</Row>
 							</div>
 
-							<Button onClick={submitHandler} className='w-100'>
-								Proceed
+							<Button onClick={submitHandle} className='w-100'>
+								Register
 							</Button>
 						</Form>
 						<hr />
@@ -131,7 +117,7 @@ const LoginScreen = ({ match, history }) => {
 								fontFamily: 'American Typewriter',
 								fontWeight: 'bold',
 							}}>
-							<Link to={`/register/${match.params.id}`}>Register</Link>
+							<Link to={`/login/${match.params.id}`}>Login</Link>
 						</Card.Text>
 						<Row className='mx-auto mt-3 d-flex justify-content-space-between'>
 							<img
@@ -141,13 +127,13 @@ const LoginScreen = ({ match, history }) => {
 								style={{ float: 'left', marginRight: '3px' }}
 								alt=''
 							/>
-							{/* <img
+							<img
 								src={Wh}
 								height='40px'
 								width='40px'
 								style={{ float: 'left' }}
 								alt=''
-							/> */}
+							/>
 						</Row>
 					</Card>
 				</Col>
@@ -156,4 +142,4 @@ const LoginScreen = ({ match, history }) => {
 	)
 }
 
-export default LoginScreen
+export default SignUpScreen
