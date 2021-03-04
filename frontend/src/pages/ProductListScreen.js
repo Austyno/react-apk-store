@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
-import { Button, Container, Table } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Button, Container, Row, Table } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { getAdminApps } from '../actions/productActions'
+import { getAdminApps, approveProduct } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 
 const ProductListScreen = ({ history }) => {
+	const [count, setCount] = useState(1)
 	const dispatch = useDispatch()
 	const productState = useSelector((state) => state.allAppsForAdmin)
 
@@ -16,16 +17,26 @@ const ProductListScreen = ({ history }) => {
 
 	const { userInfo } = user
 
+	const approveState = useSelector((state) => state.approveProduct)
+
+	const { success } = approveState
+
 	useEffect(() => {
 		if (!userInfo.token) {
 			history.push('/')
+		} else if (success) {
+			dispatch(getAdminApps())
 		} else {
 			dispatch(getAdminApps())
 		}
-	}, [dispatch, history, userInfo.token])
+	}, [dispatch, history, userInfo.token, success])
 
 	const deleteHandler = (id) => {
 		console.log(id)
+	}
+
+	const handleApprove = async (id) => {
+		dispatch(approveProduct(id))
 	}
 
 	return (
@@ -37,7 +48,20 @@ const ProductListScreen = ({ history }) => {
 					<Message>{error}</Message>
 				) : (
 					<>
-						<h1>All apks </h1>
+						<Row className='d-sm-flex align-items-center justify-content-between mb-4'>
+							<Container>
+								<h2 style={{ float: 'left' }}>
+									All Apks [{adminApps && adminApps.length}]{' '}
+								</h2>
+								<LinkContainer
+									to='/admin/create/product'
+									style={{ float: 'right' }}>
+									<Button className=''>
+										<i className='mdi mdi-plus'></i>Product
+									</Button>
+								</LinkContainer>
+							</Container>
+						</Row>
 						<Table striped bordered hover responsive className='table-sm'>
 							<thead>
 								<th>SN</th>
@@ -75,7 +99,11 @@ const ProductListScreen = ({ history }) => {
 														className='fa fa-check'
 														style={{ color: 'green' }}></i>
 												) : (
-													<Button variant='info'>Approve</Button>
+													<Button
+														className='btn btn-secondary my-2 my-sm-0'
+														onClick={() => handleApprove(p._id)}>
+														Approve
+													</Button>
 												)}
 											</td>
 											<td>

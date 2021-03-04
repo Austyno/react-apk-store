@@ -34,7 +34,6 @@ const EditorsChoice = () => {
 						More <i className='fa fa-angle-double-right'></i>
 					</Card.Text>
 				</Card.Header>
-				<Card.Img src={Image}></Card.Img>
 				<Card.Body>
 					<ListGroup variant='flush'>
 						{loading ? (

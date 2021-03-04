@@ -10,7 +10,7 @@ const Logout = ({ history }) => {
 		dispatch(LogoutUser())
 	}, [dispatch])
 
-	history.push('/')
+	return <Redirect to='/' />
 }
 
 export default Logout

@@ -10,6 +10,7 @@ const {
 	getEditorsChoice,
 	allApps,
 	getApprovedAndUnapprovedApps,
+	approve,
 } = require('../controllers/product')
 
 router.route('/editor').get(getEditorsChoice)
@@ -24,5 +25,7 @@ router
 	.get(getApk)
 	.put(protect, updateApk)
 	.delete(protect, admin, deleteApk)
+
+router.route('/:id/approve').put(protect, admin, approve)
 
 module.exports = router

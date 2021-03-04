@@ -37,7 +37,10 @@ const HomeScreen = () => {
 
 	const { categories } = allCategories
 
-	const mobileCat = categories.slice(0, 3)
+	let mobileCat
+	if (categories) {
+		mobileCat = categories.slice(0, 3)
+	}
 
 	//take the latest 3 from post array
 	const displayPost = posts ? posts.slice(0, 4) : ''
@@ -172,6 +175,10 @@ const HomeScreen = () => {
 										</Card.Body>
 									</Card>
 								))}
+							{/* tabs with hover	 */}
+							<TabComponent tab1='Games' tab2='Apps' catName='Trending Now' />
+							{/* end tabs with hover */}
+
 							{/* blog topics */}
 							<Card className='mt-3' style={{ backgroundColor: '#FFFFFF' }}>
 								<Card.Header>
@@ -193,13 +200,10 @@ const HomeScreen = () => {
 								</Row>
 							</Card>
 							{/* end latest news */}
-
-							{/* tabs with hover	 */}
-							<TabComponent tab1='Games' tab2='Apps' catName='Trending Now' />
-							{/* end tabs with hover */}
 						</Col>
 
 						<Col md={4}>
+							<EditorsChoice />
 							<Card className='my-2 p-3' style={{ background: '#FFFFFF' }}>
 								<Card.Body>
 									{/* <Container> */}
@@ -238,7 +242,6 @@ const HomeScreen = () => {
 									{/* </Container> */}
 								</Card.Body>
 							</Card>
-							<EditorsChoice />
 						</Col>
 					</Row>
 				</>

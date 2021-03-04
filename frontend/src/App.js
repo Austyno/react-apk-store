@@ -12,6 +12,7 @@ import AppsScreen from './pages/AppsScreen'
 import Logout from './pages/Logout'
 import ProductListScreen from './pages/ProductListScreen'
 import EditProductScreen from './pages/EditProductScreen'
+import CreateProductScreen from './pages/CreateProductScreen'
 
 const App = () => {
 	return (
@@ -21,6 +22,11 @@ const App = () => {
 				<main className='mr-5 ml-5'>
 					<Switch>
 						<Route exact={true} path='/' component={HomeScreen} />
+						<Route
+							exact={true}
+							path='/admin/create/product'
+							component={CreateProductScreen}
+						/>
 						<Route exact={true} path='/product/:id' component={ProductScreen} />
 						<Route exact={true} path='/post' component={PostScreen} />
 						<Route exact={true} path='/post/:id' component={SinglePostScreen} />

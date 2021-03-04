@@ -275,6 +275,27 @@ const getApprovedAndUnapprovedApps = async (req, res, next) => {
 	}
 }
 
+const approve = async (req, res, next) => {
+	const file = await Product.findById(req.params.id)
+	if (!file) {
+		return next(new ErrorResponse('the file does not exist', 400))
+	}
+	if (file.isApproved === true) {
+		return next(new ErrorResponse('file has already been approved', 400))
+	}
+
+	try {
+		file.isApproved = true
+		await file.save()
+		res.status(201).json({
+			success: true,
+			data: 'file updated successfully',
+		})
+	} catch (error) {
+		return next(new ErrorResponse('something went wrong please try again', 500))
+	}
+}
+
 module.exports = {
 	getApks,
 	getApk,
@@ -285,5 +306,6 @@ module.exports = {
 	getEditorsChoice,
 	allApps,
 	getApprovedAndUnapprovedApps,
+	approve,
 }
 // t5cLH3Bv3Et&@fD

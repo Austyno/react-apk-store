@@ -27,6 +27,9 @@ import {
 	EDIT_PRODUCT_SUCCESS,
 	EDIT_PRODUCT_FAIL,
 	EDIT_PRODUCT_RESET,
+	ADMIN_APPROVE_REQUEST,
+	ADMIN_APPROVE_SUCCESS,
+	ADMIN_APPROVE_FAIL,
 } from '../constants/productConstants'
 export const productListReducer = (state = { products: [] }, action) => {
 	switch (action.type) {
@@ -151,6 +154,19 @@ export const editProductReducer = (state = {}, action) => {
 			}
 		case EDIT_PRODUCT_RESET:
 			return {}
+		default:
+			return state
+	}
+}
+
+export const approveProductReducer = (state = {}, action) => {
+	switch (action.type) {
+		case ADMIN_APPROVE_REQUEST:
+			return { loading: true }
+		case ADMIN_APPROVE_SUCCESS:
+			return { loading: false, success: true }
+		case ADMIN_APPROVE_FAIL:
+			return { loading: false, error: action.payload }
 		default:
 			return state
 	}

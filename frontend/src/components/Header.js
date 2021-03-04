@@ -9,7 +9,6 @@ import Tech from '../images/products.png'
 import './css/off-canvas.css'
 import signUp from '../images/signup.png'
 import { useSelector } from 'react-redux'
-import { Redirect } from 'react-router-dom'
 
 const Header = ({ history }) => {
 	const user = useSelector((state) => state.userLogin)

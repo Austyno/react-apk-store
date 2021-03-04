@@ -27,6 +27,9 @@ import {
 	EDIT_PRODUCT_REQUEST,
 	EDIT_PRODUCT_SUCCESS,
 	EDIT_PRODUCT_FAIL,
+	ADMIN_APPROVE_REQUEST,
+	ADMIN_APPROVE_SUCCESS,
+	ADMIN_APPROVE_FAIL,
 } from '../constants/productConstants'
 
 export const listProducts = () => async (dispatch) => {
@@ -262,6 +265,38 @@ export const editProduct = (id, editData) => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: EDIT_PRODUCT_FAIL,
+			payload: error.response.data.error,
+		})
+	}
+}
+
+export const approveProduct = (id) => async (dispatch, getState) => {
+	dispatch({
+		type: ADMIN_APPROVE_REQUEST,
+	})
+
+	const {
+		userLogin: { userInfo },
+	} = getState()
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${userInfo.token}`,
+		},
+	}
+
+	try {
+		const res = await axios.put(`/api/products/${id}/approve`, {}, config)
+
+		const data = res.data.data
+
+		dispatch({
+			type: ADMIN_APPROVE_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: ADMIN_APPROVE_FAIL,
 			payload: error.response.data.error,
 		})
 	}

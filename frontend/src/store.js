@@ -12,6 +12,7 @@ import {
 	getAllAppsReducer,
 	getAdminAppsReducer,
 	editProductReducer,
+	approveProductReducer,
 } from './reducers/productReducers'
 
 import {
@@ -44,6 +45,7 @@ const reducers = combineReducers({
 	allCategories: allCategoryReducer,
 	allAppsForAdmin: getAdminAppsReducer,
 	editedProduct: editProductReducer,
+	approveProduct: approveProductReducer
 })
 const userInfoFromStorage = localStorage.getItem('userInfo')
 	? JSON.parse(localStorage.getItem('userInfo'))
