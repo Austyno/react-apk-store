@@ -13,6 +13,8 @@ import {
 	getAdminAppsReducer,
 	editProductReducer,
 	approveProductReducer,
+	deleteProductReducer,
+	createProductReducer,
 } from './reducers/productReducers'
 
 import {
@@ -24,18 +26,31 @@ import {
 	forgotPassword,
 	resetPassword,
 	userRegisterReducer,
+	allUsersReducer,
+	changeUserRoleReducer,
 } from './reducers/userReducers'
 
 import { allPostReducer, singlePostReducer } from './reducers/postReducers'
 
-import { allCategoryReducer } from './reducers/categoryReducer'
+import {
+	allCategoryReducer,
+	adminCategoryReducer,
+	createCategoryReducer,
+	editCategoryReducer,
+	postCategoryEdit,
+	deleteCategoryReducer,
+} from './reducers/categoryReducer'
 
 const reducers = combineReducers({
 	productList: productListReducer,
 	productDetails: productDetailsReducer,
 	similarProducts: similarProductsReducer,
 	productReviews: productReviewsReducer,
+	deleteProduct: deleteProductReducer,
+	createdProduct: createProductReducer,
 	userLogin: userLoginReducer,
+	allUsers: allUsersReducer,
+	changeRole: changeUserRoleReducer,
 	categoriesAndProductsList: listCategoriesAndProductsReducer,
 	allPost: allPostReducer,
 	singlePost: singlePostReducer,
@@ -43,15 +58,20 @@ const reducers = combineReducers({
 	editorsChoice: editorsChoiceReducer,
 	allApps: getAllAppsReducer,
 	allCategories: allCategoryReducer,
+	adminCategory: adminCategoryReducer,
+	createCategory: createCategoryReducer,
+	editCategory: editCategoryReducer,
+	postCategoryEdit: postCategoryEdit,
+	deleteCategory: deleteCategoryReducer,
 	allAppsForAdmin: getAdminAppsReducer,
 	editedProduct: editProductReducer,
-	approveProduct: approveProductReducer
+	approveProduct: approveProductReducer,
 })
 const userInfoFromStorage = localStorage.getItem('userInfo')
 	? JSON.parse(localStorage.getItem('userInfo'))
-	: null
+	: ''
 const initialState = {
-	userInfo: userInfoFromStorage,
+	userLogin: userInfoFromStorage,
 }
 const store = createStore(
 	reducers,

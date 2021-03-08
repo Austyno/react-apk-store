@@ -185,3 +185,57 @@ exports.resetPassword = async (req, res, next) => {
 		)
 	}
 }
+exports.allUsers = async (req, res, next) => {
+	try {
+		const users = await User.find().populate('products', 'name')
+		res.status(200).json({
+			success: true,
+			data: users,
+		})
+	} catch (error) {
+		next(new ErrorResponse('something went wrong,please try again', 500))
+	}
+}
+
+exports.changeRole = async (req, res, next) => {
+	const loggedinUserId = req.user._id
+	const id = req.params.id
+
+	if (loggedinUserId.toString() === id.toString()) {
+		return next(new ErrorResponse('You cannot change your own role', 400))
+	}
+
+	try {
+		const user = await User.findById(id)
+		let changedRole
+
+		if (user.role === 'admin') {
+			changedRole = 'user'
+		} else if (user.role === 'user') {
+			changedRole = 'admin'
+		}
+
+		const updateUser = await User.findByIdAndUpdate(
+			id,
+			{ role: changedRole },
+			{ new: true }
+		)
+		res.status(200).json({
+			success: true,
+			data: updateUser,
+		})
+	} catch (error) {
+		next(new ErrorResponse('sorry something went wrong', 500))
+	}
+}
+exports.deleteUser = async (req, res, next) => {
+	const id = req.params.id
+	try {
+		const del = await User.findByIdAndDelete(id)
+
+		res.status(200).json({
+			success: true,
+			data: [],
+		})
+	} catch (error) {}
+}

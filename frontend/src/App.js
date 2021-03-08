@@ -13,6 +13,11 @@ import Logout from './pages/Logout'
 import ProductListScreen from './pages/ProductListScreen'
 import EditProductScreen from './pages/EditProductScreen'
 import CreateProductScreen from './pages/CreateProductScreen'
+import AdminRoute from './routes/AdminRoutes'
+import CategoryListScreen from './pages/CategoryListScreen'
+import CreateCategoryScreen from './pages/CreateCategoryScreen'
+import EditCategoryScreen from './pages/EditCategoryScreen'
+import UsersListScreen from './pages/UsersListScreen'
 
 const App = () => {
 	return (
@@ -22,7 +27,7 @@ const App = () => {
 				<main className='mr-5 ml-5'>
 					<Switch>
 						<Route exact={true} path='/' component={HomeScreen} />
-						<Route
+						<AdminRoute
 							exact={true}
 							path='/admin/create/product'
 							component={CreateProductScreen}
@@ -38,15 +43,35 @@ const App = () => {
 						/>
 						<Route exact={true} path='/apps' component={AppsScreen} />
 						<Route exact={true} path='/logout' component={Logout} />
-						<Route
+						<AdminRoute
 							exact={true}
 							path='/admin/products'
 							component={ProductListScreen}
 						/>
-						<Route
+						<AdminRoute
 							exact={true}
 							path='/admin/products/:id/edit'
 							component={EditProductScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/category'
+							component={CategoryListScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/category/create'
+							component={CreateCategoryScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/category/:id/edit'
+							component={EditCategoryScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/users'
+							component={UsersListScreen}
 						/>
 					</Switch>
 				</main>

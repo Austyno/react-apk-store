@@ -50,5 +50,10 @@ UserSchema.virtual('reviews', {
 	localField: '_id',
 	foreignField: 'user',
 })
+UserSchema.virtual('products', {
+	ref: 'Product',
+	localField: '_id',
+	foreignField: 'uploadedBy',
+})
 
 module.exports = mongoose.model('User', UserSchema)

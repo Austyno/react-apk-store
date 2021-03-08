@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import { Col, Container, Form, Row } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { getAllCategory } from '../actions/categoryActions'
 import { fetchProduct, editProduct } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import { LinkContainer } from 'react-router-bootstrap'
 
 const EditProductScreen = ({ history, match }) => {
 	const dispatch = useDispatch()
@@ -68,9 +70,40 @@ const EditProductScreen = ({ history, match }) => {
 		dispatch(editProduct(match.params.id, submitData))
 	}
 
+	const uploadImage = async (e) => {
+		const image = e.target.files[0]
+		const formData = new FormData()
+
+		formData.append('logo', image)
+		const user = JSON.parse(localStorage.getItem('userInfo'))
+		const { userInfo } = user
+
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		}
+
+		try {
+			const res = await axios.post('/api/products/upload', formData, config)
+			const imageUrl = res.data.data
+
+			setLogo(imageUrl)
+			console.log(imageUrl)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	return (
 		<>
 			<Container>
+				<LinkContainer to={`/admin/products`}>
+					<span
+						className='mdi mdi-arrow-left mdi-36px'
+						style={{ marginTop: '30px' }}></span>
+				</LinkContainer>
 				{loading ? (
 					<Loader />
 				) : error ? (
@@ -124,6 +157,18 @@ const EditProductScreen = ({ history, match }) => {
 												style={{ height: '50px', width: '50px' }}
 											/>
 										</Row>
+										<div className='form-group'>
+											<Row>
+												<div className='col-4'></div>
+												<div className='col-8'>
+													<Form.File
+														name='logo'
+														label='change apk Logo'
+														custom
+														onChange={uploadImage}></Form.File>
+												</div>
+											</Row>
+										</div>
 									</div>
 
 									<div className='form-group'>
@@ -158,36 +203,25 @@ const EditProductScreen = ({ history, match }) => {
 										</Row>
 									</div>
 
-									<div className='form-group'>
-										<Row>
-											<label className='col-4 control-label py-2'>Price</label>
-											<div className='col-8'>
-												<input
-													className='form-control'
-													type='text'
-													value={price}
-													onChange={(e) => setPrice(e.target.value)}
-												/>
-											</div>
-										</Row>
-									</div>
-
-									<div className='form-group'>
-										<Row>
-											<label className='col-4 control-label py-2'>
-												Apk Url
-											</label>
-											<div className='col-8'>
-												<input
-													className='form-control'
-													type='text'
-													value={apk}
-													required
-													onChange={(e) => setApk(e.target.value)}
-												/>
-											</div>
-										</Row>
-									</div>
+									{price !== 0 ? (
+										<div className='form-group'>
+											<Row>
+												<label className='col-4 control-label py-2'>
+													Price
+												</label>
+												<div className='col-8'>
+													<input
+														className='form-control'
+														type='text'
+														value={price}
+														onChange={(e) => setPrice(e.target.value)}
+													/>
+												</div>
+											</Row>
+										</div>
+									) : (
+										''
+									)}
 
 									<div className='form-group'>
 										{/* Todo: get the select to have a default value of the current product cat */}
@@ -200,18 +234,9 @@ const EditProductScreen = ({ history, match }) => {
 													className='form-control'
 													required
 													onChange={(e) => setCategory(e.target.value)}>
-													{categories &&
-														categories.map((cat) => (
-															<option
-																value={cat._id}
-																selected={
-																	cat._id === product.category._id
-																		? product.category._id
-																		: ''
-																}>
-																{cat.categoryName}
-															</option>
-														))}
+													{categories.map((cat) => (
+														<option value={cat._id}>{cat.categoryName}</option>
+													))}
 												</select>
 											</div>
 										</Row>

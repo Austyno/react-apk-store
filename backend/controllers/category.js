@@ -3,6 +3,7 @@ const ErrorResponse = require('../utils/errorResponse')
 const Product = require('../models/Product')
 
 exports.addCategory = async (req, res, next) => {
+	console.log(req.body)
 	try {
 		const cat = await Category.create(req.body)
 
@@ -26,8 +27,24 @@ exports.getCategories = async (req, res, next) => {
 	})
 }
 
+exports.getCategory = async (req, res, next) => {
+	const catId = req.params.id
+
+	try {
+		const cat = await Category.findById(catId)
+
+		res.status(200).json({
+			success: true,
+			data: cat,
+		})
+	} catch (error) {
+		next(new ErrorResponse('something went wrong please try again', 500))
+	}
+}
+
 exports.deleteCategory = async (req, res, next) => {
 	const cat = Category.findById(req.params.id)
+	console.log(cat)
 
 	if (!cat) {
 		return next(new ErrorResponse('Category does not exist', 400))
@@ -55,7 +72,6 @@ exports.updateCategory = async (req, res, next) => {
 		const update = await Category.findByIdAndUpdate(req.params.id, req.body, {
 			new: true,
 		})
-
 		res.status(201).json({
 			success: true,
 			data: update,
@@ -83,5 +99,17 @@ exports.getProducts = async (req, res, next) => {
 		})
 	} catch (error) {
 		next(new ErrorResponse('sorry something went wrong please try again', 500))
+	}
+}
+
+exports.allCategoryAdmin = async (req, res, next) => {
+	try {
+		const cat = await Category.find({})
+		res.status(200).json({
+			success: true,
+			data: cat,
+		})
+	} catch (error) {
+		next(new ErrorResponse('something went wrong please try again', 500))
 	}
 }

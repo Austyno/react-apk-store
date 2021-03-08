@@ -243,15 +243,32 @@ const Header = ({ history }) => {
 									<LinkContainer to='/admin/users'>
 										<Dropdown.Item>User List</Dropdown.Item>
 									</LinkContainer>
+									<LinkContainer to='/admin/posts'>
+										<Dropdown.Item>Post List</Dropdown.Item>
+									</LinkContainer>
 									<Dropdown.Divider />
+									<LinkContainer to='/logout'>
+										<Dropdown.Item>Logout</Dropdown.Item>
+									</LinkContainer>
 								</>
-							) : (
-								''
-							)}
-							{userInfo && userInfo.userData ? (
-								<LinkContainer to='/logout'>
-									<Dropdown.Item>Logout</Dropdown.Item>
-								</LinkContainer>
+							) : userInfo &&
+							  userInfo.userData &&
+							  userInfo.userData.role === 'user' ? (
+								<>
+									<LinkContainer to=''>
+										<Dropdown.Item>My Apps</Dropdown.Item>
+									</LinkContainer>
+									<LinkContainer to=''>
+										<Dropdown.Item>Upload App</Dropdown.Item>
+									</LinkContainer>
+									<LinkContainer to=''>
+										<Dropdown.Item>View profile</Dropdown.Item>
+									</LinkContainer>
+									<Dropdown.Divider />
+									<LinkContainer to='/logout'>
+										<Dropdown.Item>Logout</Dropdown.Item>
+									</LinkContainer>
+								</>
 							) : (
 								<>
 									<LinkContainer to='/register'>

@@ -2,37 +2,36 @@ import React, { useEffect, useState } from 'react'
 import { Button, Container, Row, Table } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { getAdminApps, approveProduct } from '../actions/productActions'
+import {
+	getAdminApps,
+	approveProduct,
+	deleteProduct,
+} from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 
 const ProductListScreen = ({ history }) => {
 	const [count, setCount] = useState(1)
+
 	const dispatch = useDispatch()
 	const productState = useSelector((state) => state.allAppsForAdmin)
 
 	const { loading, error, adminApps } = productState
 
-	const user = useSelector((state) => state.userLogin)
-
-	const { userInfo } = user
-
 	const approveState = useSelector((state) => state.approveProduct)
 
 	const { success } = approveState
 
+	const delState = useSelector(state => state.deleteProduct)
+
+	const { success: deleteSuccess } = delState
+
 	useEffect(() => {
-		if (!userInfo.token) {
-			history.push('/')
-		} else if (success) {
-			dispatch(getAdminApps())
-		} else {
-			dispatch(getAdminApps())
-		}
-	}, [dispatch, history, userInfo.token, success])
+		dispatch(getAdminApps())
+	}, [dispatch, success, deleteSuccess])
 
 	const deleteHandler = (id) => {
-		console.log(id)
+		dispatch(deleteProduct(id))
 	}
 
 	const handleApprove = async (id) => {
@@ -89,8 +88,8 @@ const ProductListScreen = ({ history }) => {
 												/>
 											</td>
 											<td>{p.name}</td>
-											<td>{p.category.categoryName}</td>
-											<td>{p.uploadedBy !== null ? p.uploadedBy.email : ''}</td>
+											<td>{p.category && p.category.categoryName}</td>
+											<td>{p.uploadedBy !== null ? p.uploadedBy.email : 'Admin'}</td>
 											<td>{p.totalDownloads}</td>
 											<td>{p.createdAt.split('T')[0]}</td>
 											<td>

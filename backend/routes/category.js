@@ -6,9 +6,13 @@ const {
 	updateCategory,
 	getCategories,
 	getProducts,
+	allCategoryAdmin,
+	getCategory,
 } = require('../controllers/category')
 
 router.route('/').get(getCategories).post(protect, admin, addCategory)
+router.route('/admin').get(protect, admin, allCategoryAdmin)
+router.route('/:id/edit').get(protect, admin, getCategory)
 
 router
 	.route('/:id')

@@ -7,12 +7,13 @@ const CategorySchema = new mongoose.Schema(
 			required: [true, 'Please add a category name'],
 			trim: true,
 		},
+		createdAt: {
+			type: Date,
+			default: Date.now(),
+		},
 	},
 	{
 		toJSON: { virtuals: true },
-	},
-	{
-		timestamps: true,
 	}
 )
 

@@ -11,38 +11,33 @@ import { Link } from 'react-router-dom'
 const LoginScreen = ({ match, history }) => {
 	const dispatch = useDispatch()
 
-	const loggedin = useSelector((state) => state.userLogin)
+	const loginState = useSelector((state) => state.userLogin)
 
-	const { loading, error, userInfo } = loggedin
+	const { loading, error, userInfo } = loginState
 
 	const [formState, setFomState] = useState({
 		email: '',
 		password: '',
 	})
 
-	// useEffect(() => {
-	// 	const user = JSON.parse(localStorage.getItem('userInfo'))
-	// 	if (user) {
-	// 		if (user.userData.role === 'admin') {
-	// 			history.push('/admin/products/')
-	// 		}
-	// 	}
-	// }, [history])
+	useEffect(() => {
+		if (userInfo && userInfo.userData) {
+			setTimeout(() => {
+				const id = match.params.id
 
-	if (userInfo && userInfo.userData) {
-		setTimeout(() => {
-			const id = match.params.id
+				if (userInfo.userData.role === 'admin') {
+					return history.push('/admin/products')
+				}
+				if (id) {
+					history.push(`/product/${id}`)
+				} else {
+					history.push('/')
+				}
+			}, 1000)
+		}
+	}, [history,match,userInfo])
 
-			if (userInfo.userData.role === 'admin') {
-				return history.push('/admin/products')
-			}
-			if (id) {
-				history.push(`/product/${id}`)
-			} else {
-				history.push('/')
-			}
-		}, 1000)
-	}
+	
 
 	const handleChange = (e) => {
 		const name = e.target.name

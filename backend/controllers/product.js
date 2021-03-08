@@ -3,9 +3,7 @@ const fs = require('fs')
 const ErrorResponse = require('../utils/errorResponse')
 const Product = require('../models/Product')
 
-// @desc      Get all products
-// @route     GET /api/v1/products
-// @access    Public
+
 const getApks = async (req, res, next) => {
 	try {
 		const apks = await Product.find({ isApproved: true })
@@ -28,9 +26,7 @@ const getApks = async (req, res, next) => {
 	}
 }
 
-// @desc      Get product
-// @route     GET /api/v1/products/:id
-// @access    Public
+
 const getApk = async (req, res, next) => {
 	const id = req.params.id
 
@@ -48,45 +44,47 @@ const getApk = async (req, res, next) => {
 	}
 }
 
-// @desc      Add product
-// @route     POST /api/v1/products/
-// @access    Private
+const uploadProduct = async (req, res, next) => {
+	try {
+		req.body.uploadedBy = req.user.id
+		if (req.user.role === 'admin') {
+			req.body.isApproved = true
+		}
+		const product = await Product.create(req.body)
+		res.status(201).json({
+			success: true,
+			data: product,
+		})
+	} catch (error) {
+		next(new ErrorResponse('something went wrong.Please try again', 500))
+	}
+}
+
+
+
 const uploadApk = async (req, res, next) => {
 	req.body.uploadedBy = req.user.id
 
-	const { apk } = req.body
+	const apkFile = req.files.apk
 
-	if (!req.user) {
-		return next(
-			new ErrorResponse(
-				'user not authorized to upload apk. Please sign up and Login',
-				400
-			)
-		)
-	}
-	if (req.user.role === 'admin') {
-		req.body.isApproved = true
+	if (apkFile.name.split('.')[1] !== 'apk') {
+		return next(new ErrorResponse('please upload an apk file', 400))
 	}
 
-	if (!apk) {
-		return next(
-			new ErrorResponse('Please add a download link for the apk', 400)
-		)
-	}
+	const newName = `${apkFile.name.split('.')[0]}-${Date.now()}${path.extname(
+		apkFile.name
+	)}`
+	const uploadPath = path.join(__dirname, '../apks')
 
-	if (apk) {
-		try {
-			const result = await Product.create(req.body)
+	try {
+		const upld = apkFile.mv(`${uploadPath}/${newName}`)
 
-			res.status(201).json({
-				success: true,
-				data: result,
-			})
-		} catch (err) {
-			next(
-				new ErrorResponse('sorry something went wrong. Please try again', 500)
-			)
-		}
+		res.status(200).json({
+			success: true,
+			data: `${uploadPath}/${newName}`,
+		})
+	} catch (error) {
+		next(new ErrorResponse('sorry could not upload file', 500))
 	}
 }
 
@@ -100,7 +98,7 @@ const uploadImages = (req, res, next) => {
 			new ErrorResponse(
 				`Image type ${
 					logo.mimetype.split('/')[1]
-				} is not allowed. Allowed Logo types ${allowedLogoTypes}`,
+				} is not allowed. Allowed image types ${allowedLogoTypes}`,
 				400
 			)
 		)
@@ -114,30 +112,6 @@ const uploadImages = (req, res, next) => {
 			)
 		)
 	}
-
-	// //check image type
-	// if (!allowedMediaTypes.includes(media.mimetype.split('/')[1])) {
-	// 	return next(
-	// 		new ErrorResponse(
-	// 			`media type ${
-	// 				media.mimetype.split('/')[1]
-	// 			} is not allowed. Allowed media types ${allowedMediaTypes}`,
-	// 			400
-	// 		)
-	// 	)
-	// }
-
-	// //check file size
-	// if (media.size > process.env.MAX_FILE_UPLOAD) {
-	// 	return next(
-	// 		new ErrorResponse(
-	// 			`Please upload a file less than ${
-	// 				process.env.MAX_FILE_UPLOAD / 1000000
-	// 			}mb`,
-	// 			400
-	// 		)
-	// 	)
-	// }
 
 	const newName = `${logo.name.split('.')[0]}-${Date.now()}${path.extname(
 		logo.name
@@ -153,9 +127,7 @@ const uploadImages = (req, res, next) => {
 	})
 }
 
-// @desc      Update apk
-// @route     PUT /api/v1/products/:id
-// @access    Private
+
 const updateApk = async (req, res, next) => {
 	const file = Product.findById(req.params.id)
 
@@ -182,23 +154,27 @@ const updateApk = async (req, res, next) => {
 	}
 }
 
-// @desc      DElete apk
-// @route     PUT /api/v1/products/:id
-// @access    Private Admin
+
 const deleteApk = async (req, res, next) => {
 	const file = await Product.findById(req.params.id)
 
 	if (!file) {
 		return next(new ErrorResponse('file does not exist', 400))
 	}
+	const logoPath = path.join(__dirname, '../../frontend/public/img/mediaFiles/')
+	const logoName = file.logo.split('/')[3]
+
+	const apk = file.apk
+
+	console.log(`${logoPath}${logoName}`)
 
 	try {
-		// locate all media files and delete
-		if (fs.existsSync(`${process.env.FILE_UPLOAD_PATH}/${file.productMedia}`)) {
-			fs.unlinkSync(`${process.env.APK_FOLDER}/${file.name}`)
-			fs.unlinkSync(`${process.env.FILE_UPLOAD_PATH}/${file.productMedia}`)
-			fs.unlinkSync(`${process.env.FILE_UPLOAD_PATH}/${file.logo}`)
+		// locate logo and apk and delete
+		if (fs.existsSync(apk) && fs.existsSync(`${logoPath}${logoName}`)) {
+			fs.unlinkSync(`${logoPath}${logoName}`)
+			fs.unlinkSync(apk)
 		}
+		// delete everything else
 		const del = await Product.findByIdAndDelete(req.params.id)
 
 		res.status(200).json({
@@ -217,11 +193,9 @@ const deleteApk = async (req, res, next) => {
 
 const getEditorsChoice = async (req, res, next) => {
 	try {
-		// const editorchoice = await Product.find({
-		// 	$and: [{ isApproved: true }, { editorsChoice: true }],
-		// })
+		/** change code in production to show only approved and editors choice */
 		const editorchoice = await Product.find({
-			isApproved: true,
+			$and: [{ isApproved: true }, { editorsChoice: true }],
 		})
 			.populate('category', 'categoryName')
 			.select('-apk')
@@ -285,8 +259,12 @@ const approve = async (req, res, next) => {
 	}
 
 	try {
-		file.isApproved = true
-		await file.save()
+		const upd = await Product.findByIdAndUpdate(
+			req.params.id,
+			{ isApproved: true },
+			{ new: true }
+		)
+
 		res.status(201).json({
 			success: true,
 			data: 'file updated successfully',
@@ -307,5 +285,6 @@ module.exports = {
 	allApps,
 	getApprovedAndUnapprovedApps,
 	approve,
+	uploadProduct,
 }
 // t5cLH3Bv3Et&@fD

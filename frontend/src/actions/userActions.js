@@ -7,6 +7,12 @@ import {
 	USER_REGISTER_SUCCESS,
 	USER_REGISTER_FAIL,
 	RESET,
+	ALL_USERS_REQUEST,
+	ALL_USERS_SUCCESS,
+	ALL_USERS_FAIL,
+	CHANGE_ROLE_REQUEST,
+	CHANGE_ROLE_SUCCESS,
+	CHANGE_ROLE_FAIL,
 } from '../constants/userConstants'
 
 export const login = (email, password) => async (dispatch) => {
@@ -19,18 +25,12 @@ export const login = (email, password) => async (dispatch) => {
 		}
 
 		await axios.post(`/api/users/login`, authData).then((resp) => {
-			const authData = resp.data
-			const token = resp.data.token
+			const loginDetails = { userInfo: resp.data }
 
-			const userInfo = {
-				...authData,
-				token,
-			}
-
-			localStorage.setItem('userInfo', JSON.stringify(userInfo))
+			localStorage.setItem('userInfo', JSON.stringify(loginDetails))
 			dispatch({
 				type: USER_AUTH_SUCCESS,
-				payload: userInfo,
+				payload: resp.data,
 			})
 		})
 	} catch (error) {
@@ -76,4 +76,74 @@ export const LogoutUser = () => (dispatch) => {
 	dispatch({
 		type: RESET,
 	})
+}
+
+export const getAllUsers = () => async (dispatch, getState) => {
+	dispatch({
+		type: ALL_USERS_REQUEST,
+	})
+
+	const userLogin = getState().userLogin
+	const {
+		userInfo: { token },
+	} = userLogin
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}
+
+	try {
+		const res = await axios.get('/api/users', config)
+
+		const data = res.data.data
+
+		dispatch({
+			type: ALL_USERS_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: ALL_USERS_FAIL,
+			payload:
+				error.response && error.response.data.error
+					? error.response.data.error
+					: error.message,
+		})
+	}
+}
+
+export const changePermission = (id) => async (dispatch, getState) => {
+	dispatch({
+		type: CHANGE_ROLE_REQUEST,
+	})
+
+	const userLogin = getState().userLogin
+	const {
+		userInfo: { token },
+	} = userLogin
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}
+
+	try {
+		const res = await axios.put(`/api/users/${id}/changerole`, {}, config)
+
+		dispatch({
+			type: CHANGE_ROLE_SUCCESS,
+			payload: res.data.data,
+		})
+	} catch (error) {
+		dispatch({
+			type: CHANGE_ROLE_FAIL,
+			payload:
+				error.response && error.response.data.error
+					? error.response.data.error
+					: error.message,
+		})
+	}
 }

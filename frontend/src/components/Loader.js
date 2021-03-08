@@ -5,8 +5,8 @@ import './css/loader1.css'
 const Loader = () => {
 	return (
 		<>
-			<Container className='mt-5'>
-				<div className='boxes'>
+			<Container className=''>
+				<div className='boxes mx-auto my-auto'>
 					<div className='box'>
 						<div></div>
 						<div></div>
