@@ -3,7 +3,6 @@ const fs = require('fs')
 const ErrorResponse = require('../utils/errorResponse')
 const Product = require('../models/Product')
 
-
 const getApks = async (req, res, next) => {
 	try {
 		const apks = await Product.find({ isApproved: true })
@@ -26,7 +25,6 @@ const getApks = async (req, res, next) => {
 	}
 }
 
-
 const getApk = async (req, res, next) => {
 	const id = req.params.id
 
@@ -45,6 +43,7 @@ const getApk = async (req, res, next) => {
 }
 
 const uploadProduct = async (req, res, next) => {
+	console.log(req.body)
 	try {
 		req.body.uploadedBy = req.user.id
 		if (req.user.role === 'admin') {
@@ -60,10 +59,7 @@ const uploadProduct = async (req, res, next) => {
 	}
 }
 
-
-
 const uploadApk = async (req, res, next) => {
-	req.body.uploadedBy = req.user.id
 
 	const apkFile = req.files.apk
 
@@ -127,7 +123,6 @@ const uploadImages = (req, res, next) => {
 	})
 }
 
-
 const updateApk = async (req, res, next) => {
 	const file = Product.findById(req.params.id)
 
@@ -153,7 +148,6 @@ const updateApk = async (req, res, next) => {
 		next(new ErrorResponse('failed to update, please try again', 500))
 	}
 }
-
 
 const deleteApk = async (req, res, next) => {
 	const file = await Product.findById(req.params.id)
@@ -288,3 +282,6 @@ module.exports = {
 	uploadProduct,
 }
 // t5cLH3Bv3Et&@fD
+
+
+

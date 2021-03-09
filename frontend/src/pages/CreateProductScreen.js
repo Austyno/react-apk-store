@@ -7,7 +7,11 @@ import Loader from '../components/Loader'
 import { LinkContainer } from 'react-router-bootstrap'
 import { createProduct } from '../actions/productActions'
 
-const CreateProductScreen = ({history}) => {
+const CreateProductScreen = ({ history }) => {
+	const [progress, setProgress] = useState(0)
+	const [apkName, setApkName] = useState('')
+	const [formState, setFormState] = useState({})
+	const [uploading, setUploading] = useState(false)
 	const dispatch = useDispatch()
 	const catState = useSelector((state) => state.allCategories)
 
@@ -26,11 +30,7 @@ const CreateProductScreen = ({history}) => {
 			history.push('/admin/products')
 		}
 		dispatch(getAllCategory())
-	}, [dispatch,history, success])
-
-	const [formState, setFormState] = useState({})
-	const [uploading, setUploading] = useState(false)
-	const [imageUploading, setImageUploading] = useState(false)
+	}, [dispatch, history, success])
 
 	const handleChange = (e) => {
 		const name = e.target.name
@@ -48,10 +48,14 @@ const CreateProductScreen = ({history}) => {
 		dispatch(createProduct(formState))
 	}
 
+	//upload apk
 	const handleUpload = async (e) => {
+		e.preventDefault()
 		const file = e.target.files[0]
+		setApkName(e.target.files[0].name)
 		const formData = new FormData()
 		formData.append('apk', file)
+		setUploading(true)
 
 		try {
 			const config = {
@@ -59,9 +63,16 @@ const CreateProductScreen = ({history}) => {
 					'Content-Type': 'multipart/form-data',
 					Authorization: `Bearer ${userInfo.token}`,
 				},
+				onUploadProgress: (e) => {
+					const completed = Math.round((e.loaded * 100) / e.total)
+					setProgress(completed)
+				},
 			}
 
 			const res = await axios.post(`/api/products/uploadapk`, formData, config)
+			if (res) {
+				setUploading(false)
+			}
 
 			const data = res.data.data
 
@@ -72,12 +83,15 @@ const CreateProductScreen = ({history}) => {
 			console.log(data)
 		} catch (error) {
 			console.log(error)
+			setUploading(false)
 		}
 	}
 
 	const uploadImage = async (e) => {
+		e.preventDefault()
 		const image = e.target.files[0]
 		const formData = new FormData()
+		setUploading(true)
 
 		formData.append('logo', image)
 
@@ -86,6 +100,10 @@ const CreateProductScreen = ({history}) => {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					Authorization: `Bearer ${userInfo.token}`,
+				},
+				onUploadProgress: (e) => {
+					const completed = Math.round((e.loaded * 100) / e.total)
+					setProgress(completed)
 				},
 			}
 
@@ -96,11 +114,13 @@ const CreateProductScreen = ({history}) => {
 				...formState,
 				logo: imageUrl,
 			})
-			setImageUploading(false)
+
+			setUploading(false)
+
 			console.log(imageUrl)
 		} catch (error) {
 			console.log(error)
-			setImageUploading(false)
+			setUploading(false)
 		}
 	}
 
@@ -113,6 +133,17 @@ const CreateProductScreen = ({history}) => {
 			</LinkContainer>
 			<Col md={8} className='mx-auto mb-5 mt-4' style={{}}>
 				<Card className='py-4 p-3 mt-5' style={{ marginTop: '30px' }}>
+					{uploading && (
+						<div
+							className='progress-bar progress-bar-info progress-bar-striped'
+							role='progressbar'
+							aria-valuenow={progress}
+							aria-valuemin='0'
+							aria-valuemax='100'
+							style={{ width: progress + '%' }}>
+							{progress}%
+						</div>
+					)}
 					<Card.Text
 						as='h5'
 						className='mb-3 text-center'
@@ -206,6 +237,7 @@ const CreateProductScreen = ({history}) => {
 											label='upload the apk file'
 											custom
 											onChange={handleUpload}></Form.File>
+										<span>{apkName}</span>
 									</div>
 								</Row>
 							</div>
@@ -219,6 +251,11 @@ const CreateProductScreen = ({history}) => {
 											label='upload apk Logo'
 											custom
 											onChange={uploadImage}></Form.File>
+										<img
+											src={formState.logo}
+											alt=''
+											style={{ height: '70px' }}
+										/>
 									</div>
 								</Row>
 							</div>
@@ -271,6 +308,7 @@ const CreateProductScreen = ({history}) => {
 								<button
 									onClick={(e) => submitHandle(e)}
 									className='btn btn-primary block mb-5 w-50'
+									disabled={uploading ? true : false}
 									style={{ float: 'right' }}>
 									Create
 								</button>
