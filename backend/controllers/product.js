@@ -43,7 +43,6 @@ const getApk = async (req, res, next) => {
 }
 
 const uploadProduct = async (req, res, next) => {
-	console.log(req.body)
 	try {
 		req.body.uploadedBy = req.user.id
 		if (req.user.role === 'admin') {
@@ -60,7 +59,6 @@ const uploadProduct = async (req, res, next) => {
 }
 
 const uploadApk = async (req, res, next) => {
-
 	const apkFile = req.files.apk
 
 	if (apkFile.name.split('.')[1] !== 'apk') {
@@ -282,6 +280,3 @@ module.exports = {
 	uploadProduct,
 }
 // t5cLH3Bv3Et&@fD
-
-
-

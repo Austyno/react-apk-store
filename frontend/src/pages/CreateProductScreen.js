@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Col, Container, Card, Form, Row, Button } from 'react-bootstrap'
+import { Col, Container, Card, Form, Row } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllCategory } from '../actions/categoryActions'
-import Loader from '../components/Loader'
-import { LinkContainer } from 'react-router-bootstrap'
 import { createProduct } from '../actions/productActions'
+import { CREATE_PRODUCT_RESET } from '../constants/productConstants'
 
 const CreateProductScreen = ({ history }) => {
 	const [progress, setProgress] = useState(0)
@@ -15,7 +15,7 @@ const CreateProductScreen = ({ history }) => {
 	const dispatch = useDispatch()
 	const catState = useSelector((state) => state.allCategories)
 
-	const { loading, error, categories } = catState
+	const { categories } = catState
 
 	const userState = useSelector((state) => state.userLogin)
 
@@ -27,6 +27,9 @@ const CreateProductScreen = ({ history }) => {
 
 	useEffect(() => {
 		if (success) {
+			dispatch({
+				type: CREATE_PRODUCT_RESET,
+			})
 			history.push('/admin/products')
 		}
 		dispatch(getAllCategory())

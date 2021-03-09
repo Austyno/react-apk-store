@@ -35,6 +35,7 @@ import {
 	CREATE_PRODUCT_REQUEST,
 	CREATE_PRODUCT_FAIL,
 	CREATE_PRODUCT_SUCCESS,
+	CREATE_PRODUCT_RESET,
 } from '../constants/productConstants'
 export const productListReducer = (state = { products: [] }, action) => {
 	switch (action.type) {
@@ -195,6 +196,8 @@ export const createProductReducer = (state = {}, action) => {
 			return { loading: false, success: true }
 		case CREATE_PRODUCT_FAIL:
 			return { loading: false, error: action.payload }
+		case CREATE_PRODUCT_RESET:
+			return {}
 		default:
 			return state
 	}

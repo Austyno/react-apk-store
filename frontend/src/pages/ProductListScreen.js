@@ -22,7 +22,7 @@ const ProductListScreen = ({ history }) => {
 
 	const { success } = approveState
 
-	const delState = useSelector(state => state.deleteProduct)
+	const delState = useSelector((state) => state.deleteProduct)
 
 	const { success: deleteSuccess } = delState
 
@@ -89,7 +89,9 @@ const ProductListScreen = ({ history }) => {
 											</td>
 											<td>{p.name}</td>
 											<td>{p.category && p.category.categoryName}</td>
-											<td>{p.uploadedBy !== null ? p.uploadedBy.email : 'Admin'}</td>
+											<td>
+												{p.uploadedBy !== null ? p.uploadedBy.email : 'Admin'}
+											</td>
 											<td>{p.totalDownloads}</td>
 											<td>{p.createdAt.split('T')[0]}</td>
 											<td>
