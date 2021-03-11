@@ -31,7 +31,10 @@ const ProductListScreen = ({ history }) => {
 	}, [dispatch, success, deleteSuccess])
 
 	const deleteHandler = (id) => {
+		const del = window.confirm('are you sure you want to delete the product')
+		if (del) {
 		dispatch(deleteProduct(id))
+		}
 	}
 
 	const handleApprove = async (id) => {
@@ -84,7 +87,7 @@ const ProductListScreen = ({ history }) => {
 												<img
 													src={p.logo}
 													alt=''
-													style={{ height: '50p', width: '50px' }}
+													style={{ height: '50px', width: '50px' }}
 												/>
 											</td>
 											<td>{p.name}</td>

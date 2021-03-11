@@ -5,6 +5,12 @@ import {
 	POST_SINGLE_SUCCESS,
 	POST_SINGLE_REQUEST,
 	POST_SINGLE_FAIL,
+	ALL_POST_REQUEST,
+	ALL_POST_SUCCESS,
+	ALL_POST_FAIL,
+	DELETE_POST_SUCCESS,
+	DELETE_POST_REQUEST,
+	DELETE_POST_FAIL,
 } from '../constants/postConstants'
 import axios from 'axios'
 
@@ -48,6 +54,75 @@ export const singlePost = (id) => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: POST_SINGLE_FAIL,
+			payload:
+				error.response && error.response.data.error
+					? error.response.data.error
+					: error.message,
+		})
+	}
+}
+export const getAllPostAdmin = () => async (dispatch, getState) => {
+	dispatch({
+		type: ALL_POST_REQUEST,
+	})
+
+	const userLogin = getState().userLogin
+	const {
+		userInfo: { token },
+	} = userLogin
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}
+
+	try {
+		const res = await axios.get('/api/posts/admin', config)
+
+		const data = res.data.data
+
+		dispatch({
+			type: ALL_POST_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: ALL_POST_FAIL,
+			payload:
+				error.response && error.response.data.error
+					? error.response.data.error
+					: error.message,
+		})
+	}
+}
+
+export const deletePost = (id) => async (dispatch, getState) => {
+	dispatch({ type: DELETE_POST_REQUEST })
+
+	const userLogin = getState().userLogin
+	const {
+		userInfo: { token },
+	} = userLogin
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}
+
+	try {
+		const res = await axios.delete(`/api/posts/admin/${id}`, config)
+
+		const data = res.data.data
+
+		dispatch({
+			type: DELETE_POST_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: DELETE_POST_FAIL,
 			payload:
 				error.response && error.response.data.error
 					? error.response.data.error

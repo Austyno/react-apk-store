@@ -30,7 +30,12 @@ import {
 	changeUserRoleReducer,
 } from './reducers/userReducers'
 
-import { allPostReducer, singlePostReducer } from './reducers/postReducers'
+import {
+	allPostReducer,
+	singlePostReducer,
+	getAllPostAdminReducer,
+	deletePostReducer,
+} from './reducers/postReducers'
 
 import {
 	allCategoryReducer,
@@ -53,6 +58,8 @@ const reducers = combineReducers({
 	changeRole: changeUserRoleReducer,
 	categoriesAndProductsList: listCategoriesAndProductsReducer,
 	allPost: allPostReducer,
+	allPostAdmin: getAllPostAdminReducer,
+	deletePost:deletePostReducer,
 	singlePost: singlePostReducer,
 	register: userRegisterReducer,
 	editorsChoice: editorsChoiceReducer,

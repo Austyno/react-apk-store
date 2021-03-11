@@ -8,7 +8,7 @@ const Product = ({ product }) => {
 	return (
 		<>
 			<Card
-				className='apps-card'
+				className='apps-card mt-2'
 				style={{
 					height: '',
 					background: '#F8F8F8',

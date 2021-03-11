@@ -18,6 +18,8 @@ import CategoryListScreen from './pages/CategoryListScreen'
 import CreateCategoryScreen from './pages/CreateCategoryScreen'
 import EditCategoryScreen from './pages/EditCategoryScreen'
 import UsersListScreen from './pages/UsersListScreen'
+import AllPostScreen from './pages/AllPostScreen'
+import EditPost from './pages/EditPost'
 
 const App = () => {
 	return (
@@ -72,6 +74,16 @@ const App = () => {
 							exact={true}
 							path='/admin/users'
 							component={UsersListScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/posts'
+							component={AllPostScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/post/:id/edit'
+							component={EditPost}
 						/>
 					</Switch>
 				</main>

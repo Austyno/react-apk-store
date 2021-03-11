@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/errorResponse')
 
 exports.allPost = async (req, res, next) => {
 	try {
-		const allPost = await Blog.find({}).sort({createdAt: -1})
+		const allPost = await Blog.find({}).sort({ createdAt: -1 })
 		res.status(200).json({
 			success: true,
 			data: allPost,
@@ -55,4 +55,34 @@ exports.singlePost = async (req, res, next) => {
 	} catch (error) {
 		next(new ErrorResponse('something went wrong please try again', 500))
 	}
+}
+exports.allPostAdmin = async (req, res, next) => {
+	try {
+		const posts = await Blog.find()
+			.sort({ createdAt: -1 })
+			.populate('category', 'categoryName')
+		console.log(posts)
+		res.status(200).json({
+			success: true,
+			data: posts,
+		})
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			data: error,
+		})
+	}
+}
+
+exports.deletePost = async (req, res, next) => {
+	const post = await Blog.findById(req.params.id)
+	console.log(post)
+
+	const imagePath = path.join(
+		__dirname,
+		'../../frontend/public/img/mediaFiles/'
+	)
+	const imageName = file.logo.split('/')[3]
+
+	// console.log(`${imagePath}${imageName}`)
 }

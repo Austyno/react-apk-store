@@ -238,6 +238,7 @@ const CreateProductScreen = ({ history }) => {
 										<Form.File
 											name='apk'
 											label='upload the apk file'
+											style={{ cursor: 'pointer' }}
 											custom
 											onChange={handleUpload}></Form.File>
 										<span>{apkName}</span>

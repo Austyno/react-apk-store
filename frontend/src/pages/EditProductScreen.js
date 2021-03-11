@@ -7,6 +7,7 @@ import { fetchProduct, editProduct } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { LinkContainer } from 'react-router-bootstrap'
+import { EDIT_PRODUCT_RESET } from '../constants/productConstants'
 
 const EditProductScreen = ({ history, match }) => {
 	const dispatch = useDispatch()
@@ -49,9 +50,12 @@ const EditProductScreen = ({ history, match }) => {
 
 	useEffect(() => {
 		if (success) {
-			history.pop()
+			dispatch({
+				type: EDIT_PRODUCT_RESET,
+			})
+			history.push('/admin/products')
 		}
-	}, [history, success])
+	}, [history, success, dispatch])
 
 	const submitHandler = (e) => {
 		e.preventDefault()
