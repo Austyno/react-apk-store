@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Button, Container, Row, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { getAllPostAdmin, deletePost} from '../actions/postActions'
+import { getAllPostAdmin, deletePost } from '../actions/postActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 
@@ -15,14 +15,11 @@ const AllPostScreen = () => {
 		dispatch(getAllPostAdmin())
 	}, [dispatch])
 
-    const deleteHandler = (id) => {
-        const del = window.confirm(
-					'are you sure you want to delete the product'
-        )
-        if (del) {
-           dispatch(deletePost(id)) 
-        }
-		
+	const deleteHandler = (id) => {
+		const del = window.confirm('are you sure you want to delete the product')
+		if (del) {
+			dispatch(deletePost(id))
+		}
 	}
 	return (
 		<>
@@ -39,10 +36,10 @@ const AllPostScreen = () => {
 									All posts [{posts && posts.length}]{' '}
 								</h2>
 								<LinkContainer
-									to='/admin/category/create'
+									to='/admin/post/create'
 									style={{ float: 'right', cursor: 'pointer' }}>
 									<Button className=''>
-										<i className='mdi mdi-plus md-36px'></i> Category
+										<i className='mdi mdi-plus md-36px'></i> Post
 									</Button>
 								</LinkContainer>
 							</Container>

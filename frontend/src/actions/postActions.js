@@ -11,8 +11,19 @@ import {
 	DELETE_POST_SUCCESS,
 	DELETE_POST_REQUEST,
 	DELETE_POST_FAIL,
+	EDIT_POST_REQUEST,
+	EDIT_POST_SUCCESS,
+	EDIT_POST_FAIL,
+	UPDATE_POST_REQUEST,
+	UPDATE_POST_SUCCESS,
+	UPDATE_POST_FAIL,
+	CREATE_POST_REQUEST,
+	CREATE_POST_SUCCESS,
+	CREATE_POST_FAIL,
 } from '../constants/postConstants'
 import axios from 'axios'
+
+import useHeaders from '../hooks/useHeaders'
 
 export const listAllPosts = () => async (dispatch) => {
 	try {
@@ -123,6 +134,109 @@ export const deletePost = (id) => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: DELETE_POST_FAIL,
+			payload:
+				error.response && error.response.data.error
+					? error.response.data.error
+					: error.message,
+		})
+	}
+}
+export const editPost = (id) => async (dispatch, getState) => {
+	dispatch({
+		type: EDIT_POST_REQUEST,
+	})
+
+	const userLogin = getState().userLogin
+	const {
+		userInfo: { token },
+	} = userLogin
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}
+	try {
+		const res = await axios.get(`/api/posts/${id}/edit`, config)
+		const data = res.data.data
+
+		dispatch({
+			type: EDIT_POST_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: EDIT_POST_FAIL,
+			payload:
+				error.response && error.response.data.error
+					? error.response.data.error
+					: error.message,
+		})
+	}
+}
+export const updatePost = (id, post) => async (dispatch, getState) => {
+	dispatch({
+		type: UPDATE_POST_REQUEST,
+	})
+
+	const userLogin = getState().userLogin
+	const {
+		userInfo: { token },
+	} = userLogin
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}
+
+	try {
+		const res = await axios.put(`/api/posts/${id}/edit`, post, config)
+		const data = res.data.data
+
+		dispatch({
+			type: UPDATE_POST_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: UPDATE_POST_FAIL,
+			payload:
+				error.response && error.response.data.error
+					? error.response.data.error
+					: error.message,
+		})
+	}
+}
+
+export const createPost = (postData) => async (dispatch, getState) => {
+	dispatch({
+		type: CREATE_POST_REQUEST,
+	})
+
+	const userLogin = getState().userLogin
+	const {
+		userInfo: { token },
+	} = userLogin
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}
+
+	try {
+		const res = await axios.post('/api/posts', postData, config)
+
+		const data = res.data.data
+
+		dispatch({
+			type: CREATE_POST_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: CREATE_POST_FAIL,
 			payload:
 				error.response && error.response.data.error
 					? error.response.data.error

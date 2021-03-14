@@ -35,6 +35,9 @@ import {
 	singlePostReducer,
 	getAllPostAdminReducer,
 	deletePostReducer,
+	editPostReducer,
+	updatePostReducer,
+	createPostReducer,
 } from './reducers/postReducers'
 
 import {
@@ -59,7 +62,10 @@ const reducers = combineReducers({
 	categoriesAndProductsList: listCategoriesAndProductsReducer,
 	allPost: allPostReducer,
 	allPostAdmin: getAllPostAdminReducer,
-	deletePost:deletePostReducer,
+	createPost: createPostReducer,
+	editPost: editPostReducer,
+	updatePost: updatePostReducer,
+	deletePost: deletePostReducer,
 	singlePost: singlePostReducer,
 	register: userRegisterReducer,
 	editorsChoice: editorsChoiceReducer,

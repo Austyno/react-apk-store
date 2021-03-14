@@ -27,11 +27,11 @@ exports.protect = async (req, res, next) => {
 
 		next()
 	} catch (err) {
-		// return next(new ErrorResponse('Access denied', 401))
-		res.status(500).json({
-			success: false,
-			data: err,
-		})
+		return next(new ErrorResponse('Access denied', 401))
+		// res.status(500).json({
+		// 	success: false,
+		// 	data: err,
+		// })
 	}
 }
 
@@ -40,9 +40,9 @@ exports.admin = (req, res, next) => {
 	if (req.user.role == 'admin') {
 		return next()
 	}
-	// return next(new ErrorResponse('Access denied', 401))
-	res.status(401).json({
-		success: false,
-		data: 'access denied',
-	})
+	return next(new ErrorResponse('Access denied', 401))
+	// res.status(401).json({
+	// 	success: false,
+	// 	data: 'access denied',
+	// })
 }

@@ -1,4 +1,5 @@
 const path = require('path')
+const bodyParser = require('body-parser')
 const express = require('express')
 const dotenv = require('dotenv')
 const fileUpload = require('express-fileupload')
@@ -30,7 +31,8 @@ app.use(fileUpload())
 app.use(cors())
 
 // Body parser
-app.use(express.json())
+app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 app.use(mongoSanitize())
 

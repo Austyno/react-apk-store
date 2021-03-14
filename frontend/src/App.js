@@ -19,7 +19,8 @@ import CreateCategoryScreen from './pages/CreateCategoryScreen'
 import EditCategoryScreen from './pages/EditCategoryScreen'
 import UsersListScreen from './pages/UsersListScreen'
 import AllPostScreen from './pages/AllPostScreen'
-import EditPost from './pages/EditPost'
+import EditPostScreen from './pages/EditPostScreen'
+import CreatePostScreen from './pages/CreatePostScreen'
 
 const App = () => {
 	return (
@@ -83,7 +84,12 @@ const App = () => {
 						<AdminRoute
 							exact={true}
 							path='/admin/post/:id/edit'
-							component={EditPost}
+							component={EditPostScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/post/create'
+							component={CreatePostScreen}
 						/>
 					</Switch>
 				</main>

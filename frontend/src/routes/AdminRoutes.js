@@ -9,7 +9,6 @@ const AdminRoute = ({ component: Component, ...rest }) => {
 		userInfo: { userData },
 	} = userState
 
-
 	return (
 		<Route
 			{...rest}
