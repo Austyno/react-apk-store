@@ -29,7 +29,7 @@ import {
 	allUsersReducer,
 	changeUserRoleReducer,
 } from './reducers/userReducers'
-
+import { sliderListReducer,createSliderReducer } from './reducers/sliderReducer'
 import {
 	allPostReducer,
 	singlePostReducer,
@@ -79,6 +79,9 @@ const reducers = combineReducers({
 	allAppsForAdmin: getAdminAppsReducer,
 	editedProduct: editProductReducer,
 	approveProduct: approveProductReducer,
+	sliderList: sliderListReducer,
+	createSlider:createSliderReducer 
+
 })
 const userInfoFromStorage = localStorage.getItem('userInfo')
 	? JSON.parse(localStorage.getItem('userInfo'))

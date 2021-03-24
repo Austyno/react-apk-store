@@ -20,6 +20,7 @@ const userRoutes = require('./routes/user')
 const reviewRoutes = require('./routes/reviews')
 const downloadRoute = require('./routes/download')
 const blogRoutes = require('./routes/blog')
+const sliderRoutes = require('./routes/slider')
 const app = express()
 
 // Do root password:t5cLH3Bv3Et&@fD
@@ -58,6 +59,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/reviews', reviewRoutes)
 app.use('/api/download', downloadRoute)
 app.use('/api/posts', blogRoutes)
+app.use('/api/sliders', sliderRoutes)
 
 // app.get("/api/config/paypal", (req, res) =>
 //   res.send(process.env.PAYPAL_CLIENT_ID)

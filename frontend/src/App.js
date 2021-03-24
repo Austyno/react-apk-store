@@ -21,6 +21,8 @@ import UsersListScreen from './pages/UsersListScreen'
 import AllPostScreen from './pages/AllPostScreen'
 import EditPostScreen from './pages/EditPostScreen'
 import CreatePostScreen from './pages/CreatePostScreen'
+import SlidersScreen from './pages/SlidersScreen'
+import CreateSlidersScreen from './pages/CreateSlidersScreen'
 
 const App = () => {
 	return (
@@ -90,6 +92,16 @@ const App = () => {
 							exact={true}
 							path='/admin/post/create'
 							component={CreatePostScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/sliders'
+							component={SlidersScreen}
+						/>
+						<AdminRoute
+							exact={true}
+							path='/admin/sliders/create'
+							component={CreateSlidersScreen}
 						/>
 					</Switch>
 				</main>

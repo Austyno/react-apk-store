@@ -8,10 +8,11 @@ const useHeaders = () => {
 		userInfo: { userData, token },
 	} = loginState
 
-	return {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	}
+	return config
 }
 export default useHeaders

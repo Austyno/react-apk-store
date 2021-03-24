@@ -17,6 +17,7 @@ import { getAllCategory } from '../actions/categoryActions'
 import Post from '../components/Post'
 import TabComponent from '../components/TabComponent'
 import EditorsChoice from '../components/EditorsChoice'
+import images from '../components/images'
 
 const HomeScreen = () => {
 	const dispatch = useDispatch()
@@ -38,6 +39,7 @@ const HomeScreen = () => {
 	const { categories } = allCategories
 
 	let mobileCat
+
 	if (categories) {
 		mobileCat = categories.slice(0, 3)
 	}
@@ -62,7 +64,7 @@ const HomeScreen = () => {
 				<>
 					<Row>
 						<Col md={8} style={{}}>
-							<Slider />
+							<Slider slides={images} autoPlay={4} />
 						</Col>
 						<Col md={4}>
 							{/* for mobile */}

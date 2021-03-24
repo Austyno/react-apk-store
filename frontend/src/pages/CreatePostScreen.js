@@ -3,6 +3,8 @@ import { Col, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAdminCategory } from '../actions/categoryActions'
 import { createPost } from '../actions/postActions'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 import { CREATE_POST_RESET } from '../constants/postConstants'
 
 const CreatePostScreen = ({ history }) => {
@@ -18,7 +20,7 @@ const CreatePostScreen = ({ history }) => {
 
 	const postState = useSelector((state) => state.createPost)
 
-	const { success } = postState
+	const { success, loading, error } = postState
 
 	useEffect(() => {
 		dispatch(getAdminCategory())
@@ -56,6 +58,7 @@ const CreatePostScreen = ({ history }) => {
 	return (
 		<div>
 			<Row className='justify-content-md-center mt-5'>
+				{loading ? <Loader /> : error ? <Message>{error}</Message> : ''}
 				<Col xs={12} md={6}>
 					<form>
 						<div className='form-group'>

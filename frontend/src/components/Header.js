@@ -21,6 +21,7 @@ const Header = ({ history }) => {
 	// 		return history.push('/admin/products/')
 	// 	}
 	// }, [history])
+	// font-family: 'Lobster', cursive;
 
 	const toggleDrawer = () => {
 		document.querySelector('.offcanvas-collapse').classList.toggle('open')
@@ -245,6 +246,9 @@ const Header = ({ history }) => {
 									</LinkContainer>
 									<LinkContainer to='/admin/posts'>
 										<Dropdown.Item>Post List</Dropdown.Item>
+									</LinkContainer>
+									<LinkContainer to='/admin/sliders'>
+										<Dropdown.Item>Slider Images</Dropdown.Item>
 									</LinkContainer>
 									<Dropdown.Divider />
 									<LinkContainer to='/logout'>
