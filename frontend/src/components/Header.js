@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { Nav, Image, Dropdown, ButtonGroup } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
-import Logo from '../images/logo2.png'
-import Android from '../images/android.png'
-import Game from '../images/game.png'
-import Topics from '../images/topics.png'
-import Tech from '../images/products.png'
-import './css/off-canvas.css'
-import signUp from '../images/signup.png'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { Nav, Image, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import Logo from '../images/logo2.png';
+import Android from '../images/android.png';
+import Game from '../images/game.png';
+import Topics from '../images/topics.png';
+import Tech from '../images/products.png';
+import './css/off-canvas.css';
+import signUp from '../images/signup.png';
+import { useSelector } from 'react-redux';
 
 const Header = ({ history }) => {
-	const user = useSelector((state) => state.userLogin)
+	const user = useSelector(state => state.userLogin);
 
-	const { userInfo } = user
+	const { userInfo } = user;
 
 	// useEffect(() => {
 	// 	const userFromStorage = JSON.parse(localStorage.getItem('userInfo'))
@@ -24,8 +24,8 @@ const Header = ({ history }) => {
 	// font-family: 'Lobster', cursive;
 
 	const toggleDrawer = () => {
-		document.querySelector('.offcanvas-collapse').classList.toggle('open')
-	}
+		document.querySelector('.offcanvas-collapse').classList.toggle('open');
+	};
 
 	return (
 		<header>
@@ -259,12 +259,18 @@ const Header = ({ history }) => {
 							  userInfo.userData &&
 							  userInfo.userData.role === 'user' ? (
 								<>
-									<LinkContainer to=''>
-										<Dropdown.Item>My Apps</Dropdown.Item>
-									</LinkContainer>
-									<LinkContainer to=''>
-										<Dropdown.Item>Upload App</Dropdown.Item>
-									</LinkContainer>
+									<Dropdown.Item>
+										My Apps
+										<Dropdown.Menu>
+											<LinkContainer to=''>
+												<Dropdown.Item>Downloaded Apps</Dropdown.Item>
+											</LinkContainer>
+											<LinkContainer to=''>
+												<Dropdown.Item>Uploaded Apps</Dropdown.Item>
+											</LinkContainer>
+										</Dropdown.Menu>
+									</Dropdown.Item>
+
 									<LinkContainer to=''>
 										<Dropdown.Item>View profile</Dropdown.Item>
 									</LinkContainer>
@@ -290,7 +296,7 @@ const Header = ({ history }) => {
 				</div>
 			</nav>
 		</header>
-	)
-}
+	);
+};
 
-export default Header
+export default Header;

@@ -1,6 +1,6 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import {
 	productListReducer,
@@ -15,7 +15,7 @@ import {
 	approveProductReducer,
 	deleteProductReducer,
 	createProductReducer,
-} from './reducers/productReducers'
+} from './reducers/productReducers';
 
 import {
 	userLoginReducer,
@@ -28,8 +28,12 @@ import {
 	userRegisterReducer,
 	allUsersReducer,
 	changeUserRoleReducer,
-} from './reducers/userReducers'
-import { sliderListReducer,createSliderReducer } from './reducers/sliderReducer'
+} from './reducers/userReducers';
+import {
+	sliderListReducer,
+	createSliderReducer,
+	slideShowReducer,
+} from './reducers/sliderReducer';
 import {
 	allPostReducer,
 	singlePostReducer,
@@ -38,7 +42,7 @@ import {
 	editPostReducer,
 	updatePostReducer,
 	createPostReducer,
-} from './reducers/postReducers'
+} from './reducers/postReducers';
 
 import {
 	allCategoryReducer,
@@ -47,7 +51,7 @@ import {
 	editCategoryReducer,
 	postCategoryEdit,
 	deleteCategoryReducer,
-} from './reducers/categoryReducer'
+} from './reducers/categoryReducer';
 
 const reducers = combineReducers({
 	productList: productListReducer,
@@ -80,19 +84,19 @@ const reducers = combineReducers({
 	editedProduct: editProductReducer,
 	approveProduct: approveProductReducer,
 	sliderList: sliderListReducer,
-	createSlider:createSliderReducer 
-
-})
+	createSlider: createSliderReducer,
+	slideShow: slideShowReducer,
+});
 const userInfoFromStorage = localStorage.getItem('userInfo')
 	? JSON.parse(localStorage.getItem('userInfo'))
-	: ''
+	: '';
 const initialState = {
 	userLogin: userInfoFromStorage,
-}
+};
 const store = createStore(
 	reducers,
 	initialState,
 	composeWithDevTools(applyMiddleware(thunk))
-)
+);
 
-export default store
+export default store;

@@ -1,7 +1,12 @@
-const router = require('express').Router()
-const { protect, admin } = require('../middleware/auth')
-const { getSliders } = require('../controllers/slider')
+const router = require('express').Router();
+const { protect, admin } = require('../middleware/auth');
+const { getSliders, createSlide, slideShow } = require('../controllers/slider');
 
-router.route('/').get(protect, admin, getSliders)
+router
+	.route('/slides')
+	.get(protect, admin, getSliders)
+	.post(protect, admin, createSlide);
 
-module.exports = router
+router.route('/').get(slideShow);
+
+module.exports = router;

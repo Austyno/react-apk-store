@@ -1,59 +1,70 @@
-import React, { useEffect } from 'react'
-import { Col, Row, Card, Button, Container, Image } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect } from 'react';
+import { Col, Row, Card, Button, Container, Image } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	listProducts,
 	listCategoriesAndProducts,
-} from '../actions/productActions'
-import Product from '../components/Product'
-import Edu from '../images/city.svg'
-import Ed from '../images/city2.svg'
-import Slider from '../components/Slider'
-import Logo from '../images/logo2.png'
-import Android from '../images/android.png'
-import MobileSlider from '../components/MobileSlider'
-import { listAllPosts } from '../actions/postActions'
-import { getAllCategory } from '../actions/categoryActions'
-import Post from '../components/Post'
-import TabComponent from '../components/TabComponent'
-import EditorsChoice from '../components/EditorsChoice'
-import images from '../components/images'
+} from '../actions/productActions';
+import { slideShow } from '../actions/sliderActions';
+import Product from '../components/Product';
+import Edu from '../images/city.svg';
+import Ed from '../images/city2.svg';
+import Slider from '../components/Slider';
+import Logo from '../images/logo2.png';
+import Android from '../images/android.png';
+import MobileSlider from '../components/MobileSlider';
+import { listAllPosts } from '../actions/postActions';
+import { getAllCategory } from '../actions/categoryActions';
+import Post from '../components/Post';
+import TabComponent from '../components/TabComponent';
+import EditorsChoice from '../components/EditorsChoice';
+import images from '../components/images';
 
 const HomeScreen = () => {
-	const dispatch = useDispatch()
-	const productList = useSelector((state) => state.productList)
+	const dispatch = useDispatch();
+	const productList = useSelector(state => state.productList);
 
-	const { products } = productList
+	const { products } = productList;
 	const productCategories = useSelector(
-		(state) => state.categoriesAndProductsList
-	)
+		state => state.categoriesAndProductsList
+	);
 
-	const { loading, error, categoriesAndProducts } = productCategories
+	const { loading, error, categoriesAndProducts } = productCategories;
 
-	const listpost = useSelector((state) => state.allPost)
+	const listpost = useSelector(state => state.allPost);
 
-	const { posts } = listpost
+	const { posts } = listpost;
 
-	const allCategories = useSelector((state) => state.allCategories)
+	const allCategories = useSelector(state => state.allCategories);
 
-	const { categories } = allCategories
+	const { categories } = allCategories;
 
-	let mobileCat
+	const slideState = useSelector(state => state.slideShow);
+
+	const { slides } = slideState;
+
+	let mobileCat;
 
 	if (categories) {
-		mobileCat = categories.slice(0, 3)
+		mobileCat = categories.slice(0, 3);
 	}
 
 	//take the latest 3 from post array
-	const displayPost = posts ? posts.slice(0, 4) : ''
+	const displayPost = posts ? posts.slice(0, 4) : '';
 
 	useEffect(() => {
-		dispatch(listCategoriesAndProducts())
-		dispatch(listProducts)
-		dispatch(listAllPosts())
-		dispatch(getAllCategory())
-	}, [dispatch])
+		dispatch(listCategoriesAndProducts());
+		dispatch(listProducts);
+		dispatch(listAllPosts());
+		dispatch(getAllCategory());
+		dispatch(slideShow());
+	}, [dispatch]);
 
+	let imageSlides = [];
+	if (slides) {
+		slides.map(item => imageSlides.push(item.image));
+	}
+	console.log(imageSlides);
 	return (
 		<>
 			{loading ? (
@@ -64,14 +75,14 @@ const HomeScreen = () => {
 				<>
 					<Row>
 						<Col md={8} style={{}}>
-							<Slider slides={images} autoPlay={4} />
+							<Slider slides={imageSlides} autoPlay={4} />
 						</Col>
 						<Col md={4}>
 							{/* for mobile */}
 							<Container>
 								<Row className='cat mt-3'>
 									{mobileCat &&
-										mobileCat.map((cat) => (
+										mobileCat.map(cat => (
 											<Card.Body className='catbody' style={{ width: '50px' }}>
 												<Image
 													className='mb-3 ml-4'
@@ -150,7 +161,7 @@ const HomeScreen = () => {
 						{/* category and products */}
 						<Col md={8}>
 							{categoriesAndProducts &&
-								categoriesAndProducts.map((cp) => (
+								categoriesAndProducts.map(cp => (
 									<Card className='mb-3' style={{ backgroundColor: '#FFFFFF' }}>
 										<Card.Header>
 											<Card.Text
@@ -168,7 +179,7 @@ const HomeScreen = () => {
 										</Card.Header>
 										<Card.Body>
 											<Row>
-												{cp.products.map((product) => (
+												{cp.products.map(product => (
 													<Col key={product._id} sm={12} md={4} lg={3} xl={3}>
 														<Product product={product} />
 													</Col>
@@ -198,7 +209,7 @@ const HomeScreen = () => {
 									</Card.Text>
 								</Card.Header>
 								<Row className='py-3 p-3'>
-									{displayPost && displayPost.map((p) => <Post post={p} />)}
+									{displayPost && displayPost.map(p => <Post post={p} />)}
 								</Row>
 							</Card>
 							{/* end latest news */}
@@ -249,7 +260,7 @@ const HomeScreen = () => {
 				</>
 			)}
 		</>
-	)
-}
+	);
+};
 
-export default HomeScreen
+export default HomeScreen;
