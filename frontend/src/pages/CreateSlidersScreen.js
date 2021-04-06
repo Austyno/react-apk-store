@@ -120,7 +120,8 @@ const CreateSlidersScreen = ({ history }) => {
 										</FormLabel>
 									</Col>
 									<Col md={6}>
-										<FormFile
+												<FormFile
+													
 											className='form-control'
 											name='image'
 											label='select image'

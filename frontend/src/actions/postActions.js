@@ -23,7 +23,6 @@ import {
 } from '../constants/postConstants'
 import axios from 'axios'
 
-import useHeaders from '../hooks/useHeaders'
 
 export const listAllPosts = () => async (dispatch) => {
 	try {

@@ -24,6 +24,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .vscode
-backend/config
+backend/config/config.env
 
 backend/copy.js

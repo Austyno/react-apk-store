@@ -33,6 +33,7 @@ import {
 	sliderListReducer,
 	createSliderReducer,
 	slideShowReducer,
+	deleteSliderReducer,
 } from './reducers/sliderReducer';
 import {
 	allPostReducer,
@@ -86,6 +87,7 @@ const reducers = combineReducers({
 	sliderList: sliderListReducer,
 	createSlider: createSliderReducer,
 	slideShow: slideShowReducer,
+	deleteSlide: deleteSliderReducer,
 });
 const userInfoFromStorage = localStorage.getItem('userInfo')
 	? JSON.parse(localStorage.getItem('userInfo'))

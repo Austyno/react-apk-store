@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Row, Table } from 'react-bootstrap';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { listSliders } from '../actions/sliderActions';
+import { listSliders, deleteSlide } from '../actions/sliderActions';
 import { LinkContainer } from 'react-router-bootstrap';
 
 const SlidersScreen = () => {
@@ -12,11 +13,24 @@ const SlidersScreen = () => {
 
 	const { loading, error, images } = sliderState;
 
-	useEffect(() => {
-		dispatch(listSliders());
-	}, [dispatch]);
+	const delState = useSelector(state => state.deleteSlide);
 
-	const deleteHandler = (e, id) => {};
+	const { loading: delLoading, error: delError, success } = delState;
+
+	useEffect(() => {
+		if (success) {
+			dispatch(listSliders());
+		}
+		dispatch(listSliders());
+	}, [dispatch, success]);
+
+	const deleteHandler = async (e, id) => {
+		e.preventDefault();
+		const del = window.confirm('are you sure');
+		if (del) {
+			dispatch(deleteSlide(id));
+		}
+	};
 	return (
 		<>
 			<Container className='mt-5'>
@@ -27,6 +41,13 @@ const SlidersScreen = () => {
 				) : (
 					<>
 						<Row className='d-sm-flex align-items-center justify-content-between mb-4'>
+							{delLoading ? (
+								<Loader />
+							) : delError ? (
+								<Message>{delError}</Message>
+							) : (
+								''
+							)}
 							<Container>
 								<h2 style={{ float: 'left' }}>
 									All images [{images && images.length}]{' '}
@@ -48,7 +69,6 @@ const SlidersScreen = () => {
 								<th>Image</th>
 								<th></th>
 								<th></th>
-								<th></th>
 							</thead>
 							<tbody>
 								{images &&
@@ -58,16 +78,13 @@ const SlidersScreen = () => {
 											<td>{p._id}</td>
 											<td>{p.name}</td>
 											<td>
-												<img src={p.image} alt='' style={{ height: '70px' }} />
+												<img
+													src={p.image}
+													alt=''
+													style={{ height: '70px', width: '70px' }}
+												/>
 											</td>
 											<td>{p.createdAt && p.createdAt.split('T')[0]}</td>
-											<td>
-												<LinkContainer to={`/admin/sliders/${p._id}/edit`}>
-													<Button variant='secondary' className='btn btn'>
-														<i className='fa fa-edit'></i>
-													</Button>
-												</LinkContainer>
-											</td>
 											<td>
 												<Button
 													variant='danger'

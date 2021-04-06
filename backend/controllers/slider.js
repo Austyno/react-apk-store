@@ -41,3 +41,18 @@ exports.slideShow = async (req, res, next) => {
 		});
 	}
 };
+
+exports.deleteSlide = async(req,res,next) => {
+	const id = req.params.id
+	try {
+		const del = await Slider.findByIdAndDelete(id)
+		res.status(200).json({
+			success: true,
+			data: ''
+		})
+	} catch (error) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(error),
+		});
+	}
+}
