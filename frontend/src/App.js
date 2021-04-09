@@ -105,7 +105,6 @@ const App = () => {
 						/>
 					</Switch>
 				</main>
-				{/* </Container> */}
 				<Footer />
 			</BrowserRouter>
 		</>

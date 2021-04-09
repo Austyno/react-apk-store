@@ -27,3 +27,4 @@ yarn-error.log*
 backend/config/config.env
 
 backend/copy.js
+anagram.js
